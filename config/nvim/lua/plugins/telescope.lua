@@ -48,7 +48,7 @@ return {
             preview_cutoff = 120,
           },
           file_sorter = require("telescope.sorters").get_fuzzy_file,
-          file_ignore_patterns = { "node_modules" },
+          file_ignore_patterns = { "node_modules", "yarn.lock", "package.json" },
           generic_sorter = require("telescope.sorters").get_generic_fuzzy_sorter,
           path_display = { "truncate" },
           winblend = 0,
@@ -63,7 +63,10 @@ return {
           -- Developer configurations: Not meant for general override
           buffer_previewer_maker = require("telescope.previewers").buffer_previewer_maker,
         },
-        pickers = { find_files = { find_command = { "fd", "--type", "f", "--hidden", "--strip-cwd-prefix" } } },
+        pickers = {
+          find_files = { find_command = { "fd", "--type", "f", "--hidden", "--strip-cwd-prefix" } },
+          buffers = { sort_mru = true, ignore_current_buffer = true },
+        },
         extensions = {
           fzf = { fuzzy = true, override_generic_sorter = true, override_file_sorter = true, case_mode = "smart_case" },
         },

@@ -141,7 +141,7 @@
     # do not warn about missing whitespace at EOF
     whitespace = nowarn
 [core]
-    pager = delta
+    ; pager = delta
     editor = vim
     whitespace = cr-at-eol
 [delta]

@@ -252,7 +252,7 @@ vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
   { import = "plugins" },
-  { import = "plugins.extras.copilot" },
+  -- { import = "plugins.extras.copilot" },
   { import = "plugins.extras.astro" },
 }, { ui = { border = theme.border } })
 
@@ -260,7 +260,7 @@ cmd([[syntax on]])
 cmd([[filetype plugin indent on]])
 
 if require("utils").is_dark_mode() then
-  vim.g.catppuccin_flavour = "mocha"
+  vim.g.catppuccin_flavour = "macchiato"
   vim.o.background = "dark"
 else
   vim.g.catppuccin_flavour = "latte"
@@ -285,3 +285,6 @@ cmd([[highlight Comment cterm=italic term=italic gui=italic]])
 cmd([[highlight htmlArg cterm=italic term=italic gui=italic]])
 cmd([[highlight xmlAttrib cterm=italic term=italic gui=italic]])
 cmd([[highlight Normal ctermbg=none]])
+
+-- rest nvim
+nmap("<F5>", "<Plug>RestNvim")

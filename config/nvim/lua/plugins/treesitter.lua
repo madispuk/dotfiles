@@ -37,6 +37,7 @@ return {
         "vim",
         "yaml",
         "tsx",
+        "http",
       },
       incremental_selection = {
         enable = true,

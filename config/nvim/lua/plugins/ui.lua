@@ -393,7 +393,7 @@ return {
     lazy = false,
     priority = 1000,
     opts = {
-      flavour = require("utils").is_dark_mode() and "mocha" or "latte",
+      flavour = require("utils").is_dark_mode() and "macchiato" or "latte",
       dim_inactive = { enabled = false, shade = "dark", percentage = 0.15 },
       transparent_background = true,
       term_colors = true,

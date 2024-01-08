@@ -110,7 +110,7 @@ function M.setup()
             vim.lsp.buf.format({
               ---@diagnostic disable-next-line: redefined-local
               filter = function(client)
-                return client.name == "null-ls"
+                return client.name == "null-ls" and client.name ~= "tsserver"
               end,
               bufnr = bufnr,
             })
@@ -131,7 +131,7 @@ function M.setup()
   })
 
   mason_lspconfig.setup({
-    ensure_installed = { "eslint", "tsserver", "lua_ls", "denols", "vimls", "astro", "tailwindcss" },
+    ensure_installed = { "eslint", "tsserver", "lua_ls", "vimls", "astro", "tailwindcss" },
     automatic_installation = true,
     ui = { check_outdated_servers_on_open = true },
   })
@@ -186,11 +186,9 @@ function M.setup()
       }))
     end,
 
-    eslint = function()
-      lspconfig.eslint.setup(make_conf({
-        filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
-      }))
-    end,
+    -- pyright = function()
+    --   lspconfig.pyright.setup({})
+    -- end,
 
     tsserver = function()
       lspconfig.tsserver.setup(make_conf({
@@ -206,21 +204,21 @@ function M.setup()
       }))
     end,
 
-    denols = function()
-      lspconfig.denols.setup(make_conf({
-        handlers = {
-          ["textDocument/definition"] = function(err, result, ctx, ...)
-            vim.notify("Using new definition handler")
-            if #result > 1 then
-              result = { result[1] }
-            end
-            vim.lsp.handlers["textDocument/definition"](err, result, ctx, ...)
-          end,
-        },
-        root_dir = require("lspconfig/util").root_pattern("deno.json", "deno.jsonc"),
-        init_options = { lint = true },
-      }))
-    end,
+    -- denols = function()
+    --   lspconfig.denols.setup(make_conf({
+    --     handlers = {
+    --       ["textDocument/definition"] = function(err, result, ctx, ...)
+    --         vim.notify("Using new definition handler")
+    --         if #result > 1 then
+    --           result = { result[1] }
+    --         end
+    --         vim.lsp.handlers["textDocument/definition"](err, result, ctx, ...)
+    --       end,
+    --     },
+    --     root_dir = require("lspconfig/util").root_pattern("deno.json", "deno.jsonc"),
+    --     init_options = { lint = true },
+    --   }))
+    -- end,
 
     lua_ls = function()
       lspconfig.lua_ls.setup(make_conf({
