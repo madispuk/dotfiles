@@ -13,6 +13,7 @@ local termcodes = utils.termcodes
 local nmap = utils.nmap
 local vmap = utils.vmap
 local imap = utils.imap
+
 local xmap = utils.xmap
 local omap = utils.omap
 local nnoremap = utils.nnoremap
@@ -253,7 +254,7 @@ vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({
   { import = "plugins" },
   -- { import = "plugins.extras.copilot" },
-  { import = "plugins.extras.astro" },
+  -- { import = "plugins.extras.astro" },
 }, { ui = { border = theme.border } })
 
 cmd([[syntax on]])
