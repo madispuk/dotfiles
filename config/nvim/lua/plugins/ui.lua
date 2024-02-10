@@ -27,7 +27,8 @@ return {
   -- file drawer plugin
   {
     "nvim-neo-tree/neo-tree.nvim",
-    branch = "v3.x",
+    -- branch = "v3.x",
+    tag = "3.14",
     lazy = false,
     dependencies = {
       "nvim-lua/plenary.nvim",
@@ -191,7 +192,6 @@ return {
             "thumbs.db",
           },
           never_show_by_pattern = { -- uses glob style patterns
-            -- ".null-ls_*",
           },
         },
         bind_to_cwd = true,
@@ -393,11 +393,17 @@ return {
     lazy = false,
     priority = 1000,
     opts = {
-      flavour = require("utils").is_dark_mode() and "macchiato" or "latte",
+      flavour = require("utils").is_dark_mode() and "frappe" or "latte",
       dim_inactive = { enabled = false, shade = "dark", percentage = 0.15 },
       transparent_background = true,
       term_colors = true,
       compile = { enabled = true, path = vim.fn.stdpath("cache") .. "/catppuccin", suffix = "_compiled" },
+      custom_highlights = function()
+        return {
+          DiffChange = { fg = "#E78284" },
+          DiffDelete = { fg = "#A6D189" },
+        }
+      end,
       styles = {
         comments = { "italic" },
         conditionals = { "italic" },

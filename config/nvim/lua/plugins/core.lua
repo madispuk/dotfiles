@@ -7,6 +7,9 @@ return {
   "tpope/vim-repeat",
   "AndrewRadev/splitjoin.vim",
   "tpope/vim-sleuth",
+  "tpope/vim-dadbod",
+  "kristijanhusak/vim-dadbod-ui",
+  "kristijanhusak/vim-dadbod-completion",
   "editorconfig/editorconfig-vim", -- TODO is this still required?
   {
     "andymass/vim-matchup",
@@ -57,7 +60,6 @@ return {
     },
     config = true,
     keys = {
-      { "<leader>sr", "<cmd>lua require('spectre').open()<cr>", desc = "open spectre" },
       { "<leader>sw", "<cmd>lua require('spectre').open_visual({select_word=true})<cr>", desc = "open spectre" },
       { "<leader>sp", "<cmd>lua require('spectre').open_file_search()<cr>", desc = "open spectre" },
       { "<leader>ss", "<cmd>lua require('spectre').open()<cr>", desc = "open spectre" },
@@ -89,7 +91,12 @@ return {
     dependencies = { { "nvim-lua/plenary.nvim" } },
     config = function()
       require("rest-nvim").setup({
-        --- Get the same options from Packer setup
+        result_split_horizontal = true,
+        result = {
+          stay_in_current_window_after_split = true,
+          show_curl_command = false,
+          show_headers = false,
+        },
       })
     end,
   },

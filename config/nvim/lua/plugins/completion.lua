@@ -48,6 +48,7 @@ return {
           { name = "vsnip" },
           { name = "nvim_lua" },
           { name = "nvim_lsp" },
+          { name = "vim-dadbod-completion" },
           { name = "buffer", keyword_length = 5, max_item_count = 5 },
           { name = "path" },
         }),
