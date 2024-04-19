@@ -69,7 +69,7 @@ setup_symlinks() {
     for file in $(get_linkables) ; do
         target="$HOME/.$(basename "$file" '.symlink')"
         if [ -e "$target" ]; then
-            info "~${target#$HOME} already exists... Skipping."
+            info "~${target#"$HOME"} already exists... Skipping."
         else
             info "Creating symlink for $file"
             ln -s "$file" "$target"
@@ -87,7 +87,7 @@ setup_symlinks() {
     for config in $config_files; do
         target="$HOME/.config/$(basename "$config")"
         if [ -e "$target" ]; then
-            info "~${target#$HOME} already exists... Skipping."
+            info "~${target#"$HOME"} already exists... Skipping."
         else
             info "Creating symlink for $config"
             ln -s "$config" "$target"
@@ -147,8 +147,8 @@ setup_homebrew() {
 }
 
 fetch_catppuccin_theme() {
-    for palette in frappe latte macchiato mocha; do
-        curl -o "$DOTFILES/config/kitty/themes/catppuccin-$palette.conf" "https://raw.githubusercontent.com/catppuccin/kitty/main/$palette.conf"
+    for palette in frappe latte; do
+        curl -o "$DOTFILES/config/kitty/themes/$palette.conf" "https://raw.githubusercontent.com/catppuccin/kitty/main/$palette.conf"
     done
 }
 

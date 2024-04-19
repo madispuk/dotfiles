@@ -30,6 +30,7 @@ local icons = {
   macos = " ",
   windows = " ",
   -- diagnostic icons
+  bug = "",
   -- error = "",
   -- error = "",
   error = " ",
@@ -83,19 +84,6 @@ local border = {
   { "▏", "FloatBorder" },
 }
 
-local function get_current_theme()
-  local file = io.open(os.getenv("HOME") .. "/.theme", "r")
+local current_theme = "catppuccin"
 
-  if not file then
-    return "catppuccin"
-  end
-
-  local content = file:read("*a")
-  file:close()
-
-  content = content:gsub("%s+", "")
-
-  return content
-end
-
-return { colors = colors, icons = icons, border = border, get_current_theme = get_current_theme }
+return { colors = colors, icons = icons, border = border, current_theme = current_theme }

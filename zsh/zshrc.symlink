@@ -19,9 +19,7 @@ prepend_path $HOME/bin
 
 # define the code directory
 # This is where my code exists and where I want the `c` autocomplete to work from exclusively
-if [[ -d ~/code ]]; then
-    export CODE_DIR=~/code
-elif [[ -d ~/dev ]]; then
+if [[ -d ~/dev ]]; then
     export CODE_DIR=~/dev
 fi
 
@@ -57,6 +55,7 @@ bindkey '^[[1;6C' end-of-line                       # [Alt-right] - end of line
 bindkey '^[[5D' beginning-of-line                   # [Alt-left] - beginning of line
 bindkey '^[[5C' end-of-line                         # [Alt-right] - end of line
 bindkey '^?' backward-delete-char                   # [Backspace] - delete backward
+bindkey '^Y' kill-line                              # [Ctrl-y] - remove until end of line
 if [[ "${terminfo[kdch1]}" != "" ]]; then
     bindkey "${terminfo[kdch1]}" delete-char        # [Delete] - delete forward
 else
@@ -163,12 +162,4 @@ done
 [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
 [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
 
-source "$(brew --prefix)/share/google-cloud-sdk/path.zsh.inc"
-source "$(brew --prefix)/share/google-cloud-sdk/completion.zsh.inc"
 
-export PATH="/opt/homebrew/opt/postgresql@12/bin:$PATH"
-export PATH="/opt/homebrew/opt/postgresql@15/bin:$PATH"
-
-export GOPATH=$HOME/go
-export GOROOT="$(brew --prefix golang)/libexec"
-export PATH="$PATH:${GOPATH}/bin:${GOROOT}/bin"

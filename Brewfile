@@ -28,7 +28,6 @@ brew "bat" # better cat
 brew "htop" # a top alternative
 brew "vim" # Vim (latest)
 brew "python" # python (latest)
-brew "skhd"
 brew "noti" # utility to display notifications from scripts
 brew "cloc" # lines of code counter
 brew "entr" # file watcher / command runner

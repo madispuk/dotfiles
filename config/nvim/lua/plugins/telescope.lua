@@ -14,11 +14,8 @@ return {
           mappings = {
             i = {
               ["<Esc>"] = require("telescope.actions").close, -- don't go into normal mode, just close
-              ["<C-j>"] = require("telescope.actions").move_selection_next, -- scroll the list with <c-j>
-              ["<C-k>"] = require("telescope.actions").move_selection_previous, -- scroll the list with <c-k>
-              -- ["<C-\\->"] = actions.select_horizontal, -- open selection in new horizantal split
-              -- ["<C-\\|>"] = actions.select_vertical, -- open selection in new vertical split
-              ["<C-t>"] = require("telescope.actions").select_tab, -- open selection in new tab
+              ["<C-j>"] = require("telescope.actions").move_selection_next,
+              ["<C-k>"] = require("telescope.actions").move_selection_previous,
               ["<C-y>"] = require("telescope.actions").preview_scrolling_up,
               ["<C-e>"] = require("telescope.actions").preview_scrolling_down,
             },
@@ -48,7 +45,7 @@ return {
             preview_cutoff = 120,
           },
           file_sorter = require("telescope.sorters").get_fuzzy_file,
-          file_ignore_patterns = { "node_modules", "yarn.lock" },
+          file_ignore_patterns = { "node_modules", "yarn.lock", "pnpm-lock.yaml" },
           generic_sorter = require("telescope.sorters").get_generic_fuzzy_sorter,
           path_display = { "truncate" },
           winblend = 0,

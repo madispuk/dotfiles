@@ -34,6 +34,9 @@ return {
         "typescript",
         "vim",
         "yaml",
+        "xml",
+        "http",
+        "graphql",
       },
       incremental_selection = {
         enable = true,

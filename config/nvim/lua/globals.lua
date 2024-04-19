@@ -1,3 +1,4 @@
+---@diagnostic disable: duplicate-set-field
 _GlobalCallbacks = _GlobalCallbacks or {}
 
 _G.globals = { _store = _GlobalCallbacks }

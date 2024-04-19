@@ -20,12 +20,13 @@ local nnoremap = utils.nnoremap
 local inoremap = utils.inoremap
 local vnoremap = utils.vnoremap
 local icons = require("theme").icons
-local current_theme = require("theme").get_current_theme()
+local current_theme = require("theme").current_theme
 
 -- create a completion_nvim table on _G which is visible via
 -- v:lua from vimscript
 _G.completion_nvim = {}
 
+---@diagnostic disable-next-line: duplicate-set-field
 function _G.completion_nvim.smart_pumvisible(vis_seq, not_vis_seq)
   if fn.pumvisible() == 1 then
     return termcodes(vis_seq)
@@ -146,6 +147,7 @@ opt.listchars = {
 }
 
 -- hide the ~ character on empty lines at the end of the buffer
+---@diagnostic disable-next-line: assign-type-mismatch
 opt.fcs = "eob: "
 
 -- Mappings
@@ -174,10 +176,10 @@ nmap("<C-k>", "<Plug>WinMoveUp")
 nmap("<C-l>", "<Plug>WinMoveRight")
 
 -- helpers for dealing with other people's code
-nmap([[\t]], ":set ts=4 sts=4 sw=4 noet<cr>")
-nmap([[\s]], ":set ts=4 sts=4 sw=4 et<cr>")
+-- nmap([[\t]], ":set ts=4 sts=4 sw=4 noet<cr>")
+-- nmap([[\s]], ":set ts=4 sts=4 sw=4 et<cr>")
 
-nmap("<leader>z", "<Plug>Zoom")
+-- nmap("<leader>z", "<Plug>Zoom")
 
 -- move line mappings
 local opt_h = "˙"
@@ -253,7 +255,6 @@ vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
   { import = "plugins" },
-  { import = "plugins.extras.copilot" },
 }, { ui = { border = theme.border } })
 
 cmd([[syntax on]])
@@ -287,4 +288,5 @@ cmd([[highlight xmlAttrib cterm=italic term=italic gui=italic]])
 cmd([[highlight Normal ctermbg=none]])
 
 -- rest nvim
-nmap("<F5>", "<Plug>RestNvim")
+nmap("<F5>", "<cmd>Rest run<cr>")
+nmap("<F6>", "<cmd>Rest run last<cr>")

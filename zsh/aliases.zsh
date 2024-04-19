@@ -26,3 +26,5 @@ else
   alias l="ls -lah ${colorflag}"
   alias ll="ls -lFh ${colorflag}"
 fi
+
+alias vim="nvim"

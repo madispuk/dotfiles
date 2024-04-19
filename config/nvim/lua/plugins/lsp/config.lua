@@ -86,7 +86,7 @@ function M.setup()
   mason.setup({ ui = { border = border } })
 
   mason_lspconfig.setup({
-    ensure_installed = { "eslint", "tsserver", "lua_ls", "vimls", "tailwindcss", "jsonls" },
+    ensure_installed = { "eslint", "tsserver", "lua_ls", "vimls", "tailwindcss", "jsonls", "pyright" },
     automatic_installation = true,
     ui = { check_outdated_servers_on_open = true },
   })
@@ -125,27 +125,7 @@ function M.setup()
               recommendedVariantOrder = "warning",
               unusedClass = "warning",
             },
-            experimental = {
-              -- classRegex = {
-              --   "tw`([^`]*)",
-              --   'tw="([^"]*)',
-              --   'tw={"([^"}]*)',
-              --   "tw\\.\\w+`([^`]*)",
-              --   "tw\\(.*?\\)`([^`]*)",
-
-              --   "cn`([^`]*)",
-              --   'cn="([^"]*)',
-              --   'cn={"([^"}]*)',
-              --   "cn\\.\\w+`([^`]*)",
-              --   "cn\\(.*?\\)`([^`]*)",
-
-              --   { "clsx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)" },
-              --   { "classnames\\(([^)]*)\\)", "'([^']*)'" },
-              --   { "cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]" },
-              --   "cva\\(([^)(]*(?:\\([^)(]*(?:\\([^)(]*(?:\\([^)(]*\\)[^)(]*)*\\)[^)(]*)*\\)[^)(]*)*)\\)",
-              --   "'([^']*)'",
-              -- },
-            },
+            experimental = {},
             validate = true,
           },
         },

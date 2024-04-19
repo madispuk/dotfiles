@@ -27,8 +27,7 @@ return {
   -- file drawer plugin
   {
     "nvim-neo-tree/neo-tree.nvim",
-    -- branch = "v3.x",
-    tag = "3.14",
+    branch = "v3.x",
     lazy = false,
     dependencies = {
       "nvim-lua/plenary.nvim",
@@ -38,6 +37,7 @@ return {
         "s1n7ax/nvim-window-picker",
         -- tag = "v1.*",
         config = function()
+          ---@diagnostic disable-next-line: undefined-field
           require("window-picker").setup({
             autoselect_one = true,
             include_current = false,
@@ -66,21 +66,21 @@ return {
       sort_case_insensitive = false, -- used when sorting files and directories in the tree
       use_default_mappings = false,
       sort_function = nil, -- use a custom function for sorting files and directories in the tree
-      source_selector = { winbar = true, statusline = false },
+      source_selector = { winbar = true, statusline = false, separator = "" },
       default_component_configs = {
         container = { enable_character_fade = true },
         indent = {
           indent_size = 2,
           padding = 1, -- extra padding on left hand side
           -- indent guides
-          with_markers = true,
-          indent_marker = "│",
-          last_indent_marker = "└",
+          with_markers = false,
+          -- indent_marker = "│",
+          -- last_indent_marker = "└",
           highlight = "NeoTreeIndentMarker",
           -- expander config, needed for nesting files
-          with_expanders = nil, -- if nil and file nesting is enabled, will enable expanders
-          expander_collapsed = icons.arrow_closed,
-          expander_expanded = icons.arrow_open,
+          -- with_expanders = nil, -- if nil and file nesting is enabled, will enable expanders
+          -- expander_collapsed = icons.arrow_closed,
+          -- expander_expanded = icons.arrow_open,
           expander_highlight = "NeoTreeExpander",
         },
         icon = {
@@ -177,39 +177,25 @@ return {
           hide_dotfiles = false,
           hide_gitignored = true,
           hide_hidden = true, -- only works on Windows for hidden files/directories
-          hide_by_name = {
-            -- "node_modules"
-          },
-          hide_by_pattern = { -- uses glob style patterns
-            -- "*.meta",
-            -- "*/src/*/tsconfig.json",
-          },
-          always_show = { -- remains visible even if other settings would normally hide it
-            -- ".gitignored",
-          },
-          never_show = { -- remains hidden even if visible is toggled to true, this overrides always_show
+          hide_by_name = {},
+          hide_by_pattern = {},
+          always_show = {},
+          never_show = {
             ".DS_Store",
             "thumbs.db",
           },
-          never_show_by_pattern = { -- uses glob style patterns
-          },
+          never_show_by_pattern = {},
         },
         bind_to_cwd = true,
         cwd_target = { sidebar = "tab", current = "window" },
-        follow_current_file = true, -- This will find and focus the file in the active buffer every
-        -- time the current file is changed while the tree is open.
-        group_empty_dirs = false, -- when true, empty folders will be grouped together
+        follow_current_file = { enabled = true }, -- This will find and focus the file in the active buffer every
+        group_empty_dirs = false,
         hijack_netrw_behavior = "open_default", -- netrw disabled, opening a directory opens neo-tree
-        -- in whatever position is specified in window.position
-        -- "open_current",  -- netrw disabled, opening a directory opens within the
-        -- window like netrw would, regardless of window.position
-        -- "disabled",    -- netrw left alone, neo-tree does not handle opening dirs
-        use_libuv_file_watcher = true, -- This will use the OS level file watchers to detect changes
+        use_libuv_file_watcher = false, -- This will use the OS level file watchers to detect changes
         -- instead of relying on nvim autocmd events.
         window = {
           mappings = {
             ["<bs>"] = "navigate_up",
-            -- ["<c-.>"] = "set_root",
             ["H"] = "toggle_hidden",
             ["/"] = "fuzzy_finder",
             ["D"] = "fuzzy_finder_directory",
@@ -221,15 +207,13 @@ return {
         },
       },
       buffers = {
-        follow_current_file = true, -- This will find and focus the file in the active buffer every
-        -- time the current file is changed while the tree is open.
-        group_empty_dirs = true, -- when true, empty folders will be grouped together
+        follow_current_file = { enabled = true },
+        group_empty_dirs = true,
         show_unloaded = true,
         window = {
           mappings = {
             ["bd"] = "buffer_delete",
             ["<bs>"] = "navigate_up",
-            -- ["<c-.>"] = "set_root",
           },
         },
       },
@@ -253,48 +237,69 @@ return {
   -- Status line
   {
     "nvim-lualine/lualine.nvim",
-    opts = {
-      options = {
-        icons_enabled = true,
-        theme = "auto",
-        section_separators = { right = "", left = "" },
-        component_separators = "", --{ right = "", left = "" },
-      },
-      sections = {
-        lualine_a = {
-          { "mode" },
-          {
-            "macro-recording",
-            fmt = function()
-              local recording_register = vim.fn.reg_recording()
-              if recording_register == "" then
-                return ""
-              else
-                return "Recording @" .. recording_register
-              end
-            end,
-          },
+    enabled = true,
+    event = "VeryLazy",
+    opts = function(plugin)
+      if plugin.override then
+        require("lazyvim.util").deprecate("lualine.override", "lualine.opts")
+      end
+
+      local diagnostics = {
+        "diagnostics",
+        sources = { "nvim_diagnostic" },
+        sections = { "error", "warn", "info", "hint" },
+        symbols = {
+          error = icons.bug .. " ",
+          hint = icons.hint,
+          info = icons.info,
+          warn = icons.warning,
         },
-        lualine_b = {
-          "branch",
-          { "diff", symbols = { added = " ", modified = " ", removed = "󰮉 " } },
-          "diagnostics",
+        icon = icons.lsp,
+        colored = true,
+        update_in_insert = false,
+        always_visible = false,
+      }
+
+      local diff = {
+        "diff",
+        symbols = {
+          added = icons.added,
+          untracked = icons.added,
+          modified = icons.modified,
+          removed = icons.deleted,
         },
-        lualine_c = { "filename", "searchcount" },
-        lualine_x = { "fileformat", "filetype" },
-        lualine_y = { "progress" },
-        lualine_z = { "location" },
-      },
-    },
-    config = function(_, opts)
-      local lualine = require("lualine")
-      lualine.setup(opts)
-      vim.api.nvim_create_autocmd("RecordingEnter", {
-        callback = function()
-          -- refresh lualine when entering record mode
-          lualine.refresh({ place = { "lualine_a" } })
+        icon = icons.git,
+        colored = true,
+        always_visible = false,
+        source = function()
+          ---@diagnostic disable-next-line: undefined-field
+          local gitsigns = vim.b.gitsigns_status_dict
+          if gitsigns then
+            return {
+              added = gitsigns.added,
+              modified = gitsigns.changed,
+              removed = gitsigns.removed,
+            }
+          end
         end,
-      })
+      }
+
+      return {
+        options = {
+          theme = "auto",
+          globalstatus = true,
+          component_separators = { left = "", right = "" },
+          disabled_filetypes = { statusline = { "dashboard", "lazy", "alpha" } },
+        },
+        sections = {
+          lualine_a = {},
+          lualine_b = {},
+          lualine_c = { diff, diagnostics },
+          lualine_x = {},
+          lualine_y = {},
+          lualine_z = {},
+        },
+      }
     end,
   },
 
@@ -314,23 +319,6 @@ return {
       },
       numhl = false,
       linehl = false,
-      -- keymaps = {
-      --   -- Default keymap options
-      --   noremap = true,
-      --   ["n ]c"] = { expr = true, "&diff ? ']c' : '<cmd>lua require\"gitsigns.actions\".next_hunk()<CR>'" },
-      --   ["n [c"] = { expr = true, "&diff ? '[c' : '<cmd>lua require\"gitsigns.actions\".prev_hunk()<CR>'" },
-      --   ["n <leader>hs"] = '<cmd>lua require"gitsigns".stage_hunk()<CR>',
-      --   ["v <leader>hs"] = '<cmd>lua require"gitsigns".stage_hunk({vim.fn.line("."), vim.fn.line("v")})<CR>',
-      --   ["n <leader>hu"] = '<cmd>lua require"gitsigns".undo_stage_hunk()<CR>',
-      --   ["n <leader>hr"] = '<cmd>lua require"gitsigns".reset_hunk()<CR>',
-      --   ["v <leader>hr"] = '<cmd>lua require"gitsigns".reset_hunk({vim.fn.line("."), vim.fn.line("v")})<CR>',
-      --   ["n <leader>hR"] = '<cmd>lua require"gitsigns".reset_buffer()<CR>',
-      --   ["n <leader>hp"] = '<cmd>lua require"gitsigns".preview_hunk()<CR>',
-      --   ["n <leader>hb"] = '<cmd>lua require"gitsigns".blame_line(true)<CR>',
-      --   -- Text objects
-      --   ["o ih"] = ':<C-U>lua require"gitsigns.actions".select_hunk()<CR>',
-      --   ["x ih"] = ':<C-U>lua require"gitsigns.actions".select_hunk()<CR>',
-      -- },
       watch_gitdir = { interval = 1000, follow_files = true },
       current_line_blame_opts = { delay = 1000, virtual_text_pos = "eol" },
       current_line_blame = false,
@@ -341,51 +329,6 @@ return {
       diff_opts = { internal = true },
     },
   },
-
-  {
-    "folke/tokyonight.nvim",
-    lazy = false,
-    priority = 1000,
-    opts = {
-      -- your configuration comes here
-      -- or leave it empty to use the default settings
-      style = is_dark and "storm" or "day", -- The theme comes in three styles, `storm`, `moon`, a darker variant `night` and `day`
-      light_style = "day", -- The theme is used when the background is set to light
-      transparent = true, -- Enable this to disable setting the background color
-      terminal_colors = true, -- Configure the colors used when opening a `:terminal` in [Neovim](https://github.com/neovim/neovim)
-      styles = {
-        -- Style to be applied to different syntax groups
-        -- Value is any valid attr-list value for `:help nvim_set_hl`
-        comments = { italic = true },
-        keywords = { italic = true },
-        functions = {},
-        variables = {},
-        -- Background styles. Can be "dark", "transparent" or "normal"
-        sidebars = "dark", -- style for sidebars, see below
-        floats = "dark", -- style for floating windows
-      },
-      sidebars = { "qf", "help" }, -- Set a darker background on sidebar-like windows. For example: `["qf", "vista_kind", "terminal", "packer"]`
-      day_brightness = 0.3, -- Adjusts the brightness of the colors of the **Day** style. Number between 0 and 1, from dull to vibrant colors
-      hide_inactive_statusline = false, -- Enabling this option, will hide inactive statuslines and replace them with a thin border instead. Should work with the standard **StatusLine** and **LuaLine**.
-      dim_inactive = false, -- dims inactive windows
-      lualine_bold = false, -- When `true`, section headers in the lualine theme will be bold
-    },
-  },
-
-  -- everforest theme
-  {
-    "neanias/everforest-nvim",
-    version = false,
-    lazy = false,
-    priority = 1000, -- make sure to load this before all the other start plugins
-    -- Optional; default configuration will be used if setup isn't called.
-    config = function()
-      require("everforest").setup({
-        transparent_background_level = 2,
-      })
-    end,
-  },
-
   -- Catppuccin theme
   {
     "catppuccin/nvim",
@@ -400,6 +343,7 @@ return {
       compile = { enabled = true, path = vim.fn.stdpath("cache") .. "/catppuccin", suffix = "_compiled" },
       custom_highlights = function()
         return {
+          NeoTreeTabSeparatorInactive = { fg = "#303446" },
           DiffChange = { fg = "#E78284" },
           DiffDelete = { fg = "#A6D189" },
         }
@@ -435,6 +379,8 @@ return {
             information = { "underline" },
           },
         },
+        neotree = true,
+        noice = true,
         lsp_trouble = false,
         cmp = true,
         gitsigns = true,
@@ -459,65 +405,27 @@ return {
     },
     opts = {
       timeout = 3000,
-      max_height = function()
-        return math.floor(vim.o.lines * 0.75)
-      end,
-      max_width = function()
-        return math.floor(vim.o.columns * 0.75)
-      end,
-      background_colour = "#1e222a",
+      -- max_height = function()
+      --   return math.floor(vim.o.lines * 0.75)
+      -- end,
+      -- max_width = function()
+      --   return math.floor(vim.o.columns * 0.75)
+      -- end,
+      background_colour = "#303446",
       render = "minimal",
     },
-    init = function()
-      local banned_messages = { "No information available" }
-      vim.notify = function(msg, ...)
-        for _, banned in ipairs(banned_messages) do
-          if msg == banned then
-            return
-          end
-        end
-        return require("notify")(msg, ...)
-      end
-    end,
-  },
-  -- Make folds look Prettier
-  {
-    "kevinhwang91/nvim-ufo",
-    dependencies = {
-      "kevinhwang91/promise-async",
-    },
-    opts = {
-      fold_virt_text_handler = function(virtText, lnum, endLnum, width, truncate)
-        local newVirtText = {}
-        local suffix = ("   %d "):format(endLnum - lnum)
-        local sufWidth = vim.fn.strdisplaywidth(suffix)
-        local targetWidth = width - sufWidth
-        local curWidth = 0
 
-        for _, chunk in ipairs(virtText) do
-          local chunkText = chunk[1]
-          local chunkWidth = vim.fn.strdisplaywidth(chunkText)
-          if targetWidth > curWidth + chunkWidth then
-            table.insert(newVirtText, chunk)
-          else
-            chunkText = truncate(chunkText, targetWidth - curWidth)
-            local hlGroup = chunk[2]
-            table.insert(newVirtText, { chunkText, hlGroup })
-            chunkWidth = vim.fn.strdisplaywidth(chunkText)
-            -- str width returned from truncate() may less than 2nd argument, need padding
-            if curWidth + chunkWidth < targetWidth then
-              suffix = suffix .. (" "):rep(targetWidth - curWidth - chunkWidth)
-            end
-            break
-          end
-          curWidth = curWidth + chunkWidth
-        end
-
-        table.insert(newVirtText, { suffix, "MoreMsg" })
-
-        return newVirtText
-      end,
-      close_fold_kinds = { "imports" },
-    },
+    --init = function()
+    --  local banned_messages = { "No information available" }
+    --  ---@diagnostic disable-next-line: duplicate-set-field
+    --  vim.notify = function(msg, ...)
+    --    for _, banned in ipairs(banned_messages) do
+    --      if msg == banned then
+    --        return
+    --      end
+    --    end
+    --    return require("notify")(msg, ...)
+    --  end
+    --end,
   },
 }
