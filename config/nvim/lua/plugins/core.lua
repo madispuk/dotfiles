@@ -2,8 +2,6 @@ return {
   "tpope/vim-commentary",
   "tpope/vim-unimpaired",
   "tpope/vim-surround",
-  -- "tpope/vim-ragtag",
-  "tpope/vim-abolish",
   "tpope/vim-repeat",
   "tpope/vim-sleuth",
   {
@@ -21,7 +19,6 @@ return {
       { "<leader>gb", "<cmd>G blame<cr>", desc = "read file from git" },
     },
   },
-  { "cohama/lexima.vim" },
   { "alvarosevilla95/luatab.nvim", config = true },
   -- UI component library (used for neotree)
   { "MunifTanjim/nui.nvim", lazy = true },
@@ -62,26 +59,5 @@ return {
       rocks = { "lua-curl", "nvim-nio", "mimetypes", "xml2lua" },
     },
   },
-  {
-    "rest-nvim/rest.nvim",
-    ft = "http",
-    dependencies = { "luarocks.nvim" },
-    config = function()
-      require("rest-nvim").setup({
-        result = {
-          split = {
-            horizontal = true,
-            stay_in_current_window_after_split = true,
-          },
-          behavior = {
-            show_info = {
-              -- headers = false,
-              -- curl_command = false,
-            },
-          },
-        },
-      })
-    end,
-    keys = {},
-  },
+  "WhoIsSethDaniel/mason-tool-installer.nvim",
 }

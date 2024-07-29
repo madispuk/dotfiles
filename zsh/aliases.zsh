@@ -18,6 +18,8 @@ alias lpath='echo $PATH | tr ":" "\n"'
 # recursively delete `.DS_Store` files
 alias cleanup="find . -name '*.DS_Store' -type f -ls -delete"
 
+alias cat='bat'
+
 # use exa if available
 if [[ -x "$(command -v exa)" ]]; then
   alias ll="exa --icons --git --long"

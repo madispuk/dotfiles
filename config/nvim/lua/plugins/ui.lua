@@ -1,7 +1,7 @@
 local theme = require("theme")
 local icons = theme.icons
 
-local is_dark = require("utils").is_dark_mode()
+-- local is_dark = require("utils").is_dark_mode()
 
 return {
   -- fast colorizer for showing hex colors
@@ -74,8 +74,8 @@ return {
           padding = 1, -- extra padding on left hand side
           -- indent guides
           with_markers = false,
-          -- indent_marker = "│",
-          -- last_indent_marker = "└",
+          indent_marker = "│",
+          last_indent_marker = "└",
           highlight = "NeoTreeIndentMarker",
           -- expander config, needed for nesting files
           -- with_expanders = nil, -- if nil and file nesting is enabled, will enable expanders
@@ -305,29 +305,24 @@ return {
 
   -- Floating statuslines. This is used to shwo buffer names in splits
   { "b0o/incline.nvim", opts = { hide = { cursorline = false, focused_win = false, only_win = true } } },
-
-  -- Show git diff in sign column
   {
-    "lewis6991/gitsigns.nvim",
-    opts = {
-      signs = {
-        add = { hl = "GitSignsAdd", text = "┃", numhl = "GitSignsAddNr", linehl = "GitSignsAddLn" },
-        change = { hl = "GitSignsChange", text = "┃", numhl = "GitSignsChangeNr", linehl = "GitSignsChangeLn" },
-        delete = { hl = "GitSignsDelete", text = "_", numhl = "GitSignsDeleteNr", linehl = "GitSignsDeleteLn" },
-        topdelete = { hl = "GitSignsDelete", text = "‾", numhl = "GitSignsDeleteNr", linehl = "GitSignsDeleteLn" },
-        changedelete = { hl = "GitSignsChange", text = "~", numhl = "GitSignsChangeNr", linehl = "GitSignsChangeLn" },
-      },
-      numhl = false,
-      linehl = false,
-      watch_gitdir = { interval = 1000, follow_files = true },
-      current_line_blame_opts = { delay = 1000, virtual_text_pos = "eol" },
-      current_line_blame = false,
-      sign_priority = 6,
-      update_debounce = 100,
-      status_formatter = nil, -- Use default
-      word_diff = false,
-      diff_opts = { internal = true },
-    },
+    "mhinz/vim-signify",
+    -- init = function(_)
+    --   vim.g.signify_skip = { vcs = { deny = { "git" } } }
+    -- end,
+    config = function(_, _)
+      vim.api.nvim_set_hl(0, "SignifySignAdd", { link = "GitSignsAdd" })
+      vim.api.nvim_set_hl(0, "SignifySignChange", { link = "GitSignsChange" })
+      vim.api.nvim_set_hl(0, "SignifySignChangeDelete", { link = "GitSignsChange" })
+      vim.api.nvim_set_hl(0, "SignifySignDelete", { link = "GitSignsDelete" })
+      vim.api.nvim_set_hl(0, "SignifySignDeleteFirstLine", { link = "GitSignsDelete" })
+
+      vim.g.signify_sign_add = "▎"
+      vim.g.signify_sign_change = "▎"
+      vim.g.signify_sign_delete = ""
+      vim.g.signify_sign_delete_first_line = ""
+      vim.g.signify_sign_change_delete = ""
+    end,
   },
   -- Catppuccin theme
   {
@@ -336,18 +331,11 @@ return {
     lazy = false,
     priority = 1000,
     opts = {
-      flavour = require("utils").is_dark_mode() and "frappe" or "latte",
+      flavour = "auto", -- latte, frappe, macchiato, mocha
       dim_inactive = { enabled = false, shade = "dark", percentage = 0.15 },
       transparent_background = true,
       term_colors = true,
       compile = { enabled = true, path = vim.fn.stdpath("cache") .. "/catppuccin", suffix = "_compiled" },
-      custom_highlights = function()
-        return {
-          NeoTreeTabSeparatorInactive = { fg = "#303446" },
-          DiffChange = { fg = "#E78284" },
-          DiffDelete = { fg = "#A6D189" },
-        }
-      end,
       styles = {
         comments = { "italic" },
         conditionals = { "italic" },
@@ -381,6 +369,7 @@ return {
         },
         neotree = true,
         noice = true,
+        notify = true,
         lsp_trouble = false,
         cmp = true,
         gitsigns = true,
@@ -390,42 +379,13 @@ return {
       },
     },
   },
-
-  -- Prettier notifications
   {
     "rcarriga/nvim-notify",
-    keys = {
-      {
-        "<leader>un",
-        function()
-          require("notify").dismiss({ silent = true, pending = true })
-        end,
-        desc = "Dismiss all Notifications",
-      },
-    },
+    keys = {},
     opts = {
       timeout = 3000,
-      -- max_height = function()
-      --   return math.floor(vim.o.lines * 0.75)
-      -- end,
-      -- max_width = function()
-      --   return math.floor(vim.o.columns * 0.75)
-      -- end,
       background_colour = "#303446",
       render = "minimal",
     },
-
-    --init = function()
-    --  local banned_messages = { "No information available" }
-    --  ---@diagnostic disable-next-line: duplicate-set-field
-    --  vim.notify = function(msg, ...)
-    --    for _, banned in ipairs(banned_messages) do
-    --      if msg == banned then
-    --        return
-    --      end
-    --    end
-    --    return require("notify")(msg, ...)
-    --  end
-    --end,
   },
 }

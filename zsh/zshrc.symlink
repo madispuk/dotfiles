@@ -131,14 +131,14 @@ export LESS_TERMCAP_mh=$(tput dim)
 
 # prefer zoxide over z.sh
 if [[ -x "$(command -v zoxide)" ]]; then
-    eval "$(zoxide init zsh --hook pwd)"
-else
-  # source z.sh if it exists
-  zpath="$(brew --prefix)/etc/profile.d/z.sh"
-  if [ -f "$zpath" ]; then
-      source "$zpath"
-  fi
+    eval "$(zoxide init zsh --cmd cd --hook pwd)"
 fi
+# else
+#   # source z.sh if it exists
+#   zpath="$(brew --prefix)/etc/profile.d/z.sh"
+#   if [ -f "$zpath" ]; then
+#       source "$zpath"
+#   fi
 
 # Detect which `ls` flavor is in use
 if ls --color > /dev/null 2>&1; then # GNU `ls`
@@ -161,5 +161,3 @@ done
  export NVM_DIR="$HOME/.nvm"
 [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
 [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
-
-

@@ -84,6 +84,4 @@ local border = {
   { "▏", "FloatBorder" },
 }
 
-local current_theme = "catppuccin"
-
-return { colors = colors, icons = icons, border = border, current_theme = current_theme }
+return { colors = colors, icons = icons, border = border }

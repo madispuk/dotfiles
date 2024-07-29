@@ -74,22 +74,12 @@ return {
       })
 
       local nnoremap = require("utils").nnoremap
-      nnoremap("<leader>ff", "<cmd>Telescope find_files<cr>")
-      nnoremap("<leader>fs", "<cmd>Telescope git_files<cr>")
-      nnoremap("<leader>fo", "<cmd>Telescope oldfiles<cr>")
-      nnoremap("<leader>fn", "<cmd>Telescope node_modules list<cr>")
-      nnoremap("<leader>fg", "<cmd>Telescope live_grep<cr>")
-      nnoremap("<leader>fr", "<cmd>lua require('telescope').extensions.live_grep_args.live_grep_args()<cr>")
-      nnoremap("<leader>fb", "<cmd>Telescope buffers<cr>")
-      nnoremap("<leader>r", "<cmd>Telescope buffers<cr>")
-      nnoremap("<leader>fh", "<cmd>Telescope help_tags<cr>")
-      if vim.fn.isdirectory(".git") then
-        nnoremap("<leader>t", "<cmd>Telescope git_files<cr>")
-        nnoremap("<D-p>", "<cmd>Telescope git_files<cr>")
-      else
-        nnoremap("<leader>t", "<cmd>Telescope find_files<cr>")
-        nnoremap("<D-p>", "<cmd>Telescope find_files<cr>")
-      end
+      nnoremap("<leader>ft", "<cmd>Telescope<cr>", { desc = "telescope: open" })
+      nnoremap("<leader>ff", "<cmd>Telescope find_files<cr>", { desc = "telescope: all files" })
+      nnoremap("<leader>t", "<cmd>Telescope git_files<cr>", { desc = "telescope: git files" })
+      nnoremap("<leader>r", "<cmd>Telescope buffers<cr>", { desc = "telescope: open buffers" })
+      nnoremap("<leader>fn", "<cmd>Telescope node_modules list<cr>", { desc = "telescope: node modules" })
+      nnoremap("<leader>fg", "<cmd>Telescope live_grep<cr>", { desc = "telescope: live grep" })
     end,
   },
 }
