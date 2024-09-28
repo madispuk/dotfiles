@@ -16,8 +16,8 @@ return {
               ["<Esc>"] = require("telescope.actions").close, -- don't go into normal mode, just close
               ["<C-j>"] = require("telescope.actions").move_selection_next,
               ["<C-k>"] = require("telescope.actions").move_selection_previous,
-              ["<C-y>"] = require("telescope.actions").preview_scrolling_up,
-              ["<C-e>"] = require("telescope.actions").preview_scrolling_down,
+              -- ["<C-y>"] = require("telescope.actions").preview_scrolling_up,
+              -- ["<C-e>"] = require("telescope.actions").preview_scrolling_down,
             },
           },
           vimgrep_arguments = {

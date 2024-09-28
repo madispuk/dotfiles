@@ -13,7 +13,6 @@ local inoremap = utils.inoremap
 -- v:lua from vimscript
 _G.completion_nvim = {}
 
----@diagnostic disable-next-line: duplicate-set-field
 function _G.completion_nvim.smart_pumvisible(vis_seq, not_vis_seq)
   if vim.fn.pumvisible() == 1 then
     return termcodes(vis_seq)
@@ -116,17 +115,20 @@ vim.opt.listchars = {
 vim.opt.fcs = "eob: "
 
 -- Mappings
-vim.g.mapleader = ","
+-- vim.g.mapleader = ","
+vim.g.mapleader = " "
 
 nnoremap("Q", "<nop>")
 imap("jk", "<Esc>", { desc = "escape" })
-nmap("<leader>,", ":silent w<cr>", { desc = "save file" })
+-- nmap("<leader>,", ":silent w<cr>", { desc = "save file" })
+nmap(",,", ":silent w<cr>", { desc = "save file" })
 inoremap("<C-j>", [[v:lua.completion_nvim.smart_pumvisible('<C-n>', '<C-j>')]], { expr = true })
 inoremap("<C-k>", [[v:lua.completion_nvim.smart_pumvisible('<C-p>', '<C-k>')]], { expr = true })
 vmap("<", "<gv")
 vmap(">", ">gv")
 nmap("<leader>.", "<c-^>")
 vmap(".", ":normal .<cr>")
+nnoremap("<CR>", ":noh<CR><CR>")
 
 nmap("<C-h>", "<Plug>WinMoveLeft")
 nmap("<C-j>", "<Plug>WinMoveDown")

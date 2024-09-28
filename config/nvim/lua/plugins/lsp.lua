@@ -37,8 +37,18 @@ return {
       capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
 
       local servers = {
-        tsserver = {},
-        eslint = {},
+        ts_ls = {
+          handlers = {
+            ["textDocument/definition"] = function(err, result, ctx, ...)
+              if #result > 1 then
+                result = { result[1] }
+              end
+              vim.lsp.handlers["textDocument/definition"](err, result, ctx, ...)
+            end,
+          },
+          root_dir = require("lspconfig/util").root_pattern("tsconfig.json"),
+        },
+        -- eslint = {},
         tailwindcss = {
           settings = {
             tailwindCSS = {
@@ -63,12 +73,16 @@ return {
               completion = {
                 callSnippet = "Replace",
               },
+              diagnostics = {
+                globals = { "vim" },
+              },
             },
           },
         },
         vimls = {},
         jsonls = {},
         pyright = {},
+        html = {},
       }
 
       require("mason").setup({ ui = { border = border } })
@@ -91,13 +105,13 @@ return {
             vim.keymap.set("n", keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
           end
 
-          map("gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
-          map("gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
-          map("gI", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
-          map("go", require("telescope.builtin").lsp_type_definitions, "Type [D]efinition")
-          map("gw", require("telescope.builtin").lsp_dynamic_workspace_symbols, "[W]orkspace [S]ymbols")
-          map("ga", vim.lsp.buf.code_action, "[C]ode [A]ction")
-          map("gr", vim.lsp.buf.rename, "[R]e[n]ame")
+          map("gd", require("telescope.builtin").lsp_definitions, "Goto Definition")
+          map("gR", require("telescope.builtin").lsp_references, "Goto References")
+          map("gI", require("telescope.builtin").lsp_implementations, "Goto Implementation")
+          map("go", require("telescope.builtin").lsp_type_definitions, "Type Definition")
+          map("gw", require("telescope.builtin").lsp_dynamic_workspace_symbols, "Workspace Symbols")
+          map("ga", vim.lsp.buf.code_action, "Code Action")
+          map("gr", vim.lsp.buf.rename, "Rename")
           map("K", vim.lsp.buf.hover, "Hover Documentation")
           map("S", vim.lsp.buf.signature_help, "Signature Help")
         end,
