@@ -12,6 +12,9 @@ cask "kitty" # a better terminal emulator
 cask "imageoptim" # a tool to optimize images
 cask "1password/tap/1password-cli"
 
+# Aerospace
+cask "nikitabobko/tap/aerospace"
+
 # Fonts
 cask "font-fira-code"
 cask "font-jetbrains-mono"

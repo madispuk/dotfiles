@@ -284,6 +284,12 @@ return {
         end,
       }
 
+      local branch = {
+        "branch",
+        icon = icons.git,
+        colored = true,
+      }
+
       return {
         options = {
           theme = "auto",
@@ -295,7 +301,7 @@ return {
           lualine_a = {},
           lualine_b = {},
           lualine_c = { diff, diagnostics },
-          lualine_x = {},
+          lualine_x = { branch },
           lualine_y = {},
           lualine_z = {},
         },
@@ -332,6 +338,10 @@ return {
     priority = 1000,
     opts = {
       flavour = "auto", -- latte, frappe, macchiato, mocha
+      background = {
+        light = "latte",
+        dark = "macchiato",
+      },
       dim_inactive = { enabled = false, shade = "dark", percentage = 0.15 },
       transparent_background = true,
       term_colors = true,

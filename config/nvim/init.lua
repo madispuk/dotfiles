@@ -141,6 +141,9 @@ nnoremap("k", 'v:count == 0 ? "gk" : "k"', { expr = true })
 nnoremap("^", 'v:count == 0 ? "g^" :  "^"', { expr = true })
 nnoremap("$", 'v:count == 0 ? "g$" : "$"', { expr = true })
 
+-- show current file path
+vim.api.nvim_set_keymap("n", "<leader>fp", ":echo expand('%:p')<CR>", { noremap = true, silent = true })
+
 local theme = require("theme")
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
@@ -162,6 +165,9 @@ require("lazy").setup({
 vim.cmd.colorscheme("catppuccin")
 vim.cmd([[syntax on]])
 vim.cmd([[filetype plugin indent on]])
+
+-- remove trailing whitespace on save
+vim.cmd([[autocmd BufWritePre * :%s/\s\+$//e]])
 
 -- set up custom symbols for LSP errors
 local signs =
