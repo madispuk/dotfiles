@@ -21,6 +21,7 @@ cask "font-jetbrains-mono"
 cask "font-cascadia-mono"
 cask "font-symbols-only-nerd-font"
 cask "font-recursive-code"
+cask "font-hack"
 
 # packages
 brew "zsh" # zsh (latest)
@@ -53,3 +54,4 @@ brew "wdiff" # word differences in text files
 brew "wget" # internet file retriever
 brew "z" # switch between most used directories
 brew "zoxide" # switch between most used directories
+brew "stow" # symlink farm manager

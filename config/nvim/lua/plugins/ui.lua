@@ -340,7 +340,7 @@ return {
       flavour = "auto", -- latte, frappe, macchiato, mocha
       background = {
         light = "latte",
-        dark = "macchiato",
+        dark = "mocha",
       },
       dim_inactive = { enabled = false, shade = "dark", percentage = 0.15 },
       transparent_background = true,
