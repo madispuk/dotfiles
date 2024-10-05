@@ -46,12 +46,12 @@ setopt HIST_IGNORE_ALL_DUPS      # delete old recorded entry if new entry is a d
 setopt COMPLETE_ALIASES
 
 # make terminal command navigation sane again
-bindkey "^[[1;4C" forward-word                      # [Ctrl-right] - forward one word
-bindkey "^[[1;4D" backward-word                     # [Ctrl-left] - backward one word
+bindkey "^[[1;5C" forward-word                      # [Ctrl-right] - forward one word
+bindkey "^[[1;5D" backward-word                     # [Ctrl-left] - backward one word
 bindkey '^[^[[C' forward-word                       # [Ctrl-right] - forward one word
 bindkey '^[^[[D' backward-word                      # [Ctrl-left] - backward one word
-bindkey '^[[1;6D' beginning-of-line                 # [Alt-left] - beginning of line
-bindkey '^[[1;6C' end-of-line                       # [Alt-right] - end of line
+bindkey '^[[1;3D' beginning-of-line                 # [Alt-left] - beginning of line
+bindkey '^[[1;3C' end-of-line                       # [Alt-right] - end of line
 bindkey '^[[5D' beginning-of-line                   # [Alt-left] - beginning of line
 bindkey '^[[5C' end-of-line                         # [Alt-right] - end of line
 bindkey '^?' backward-delete-char                   # [Backspace] - delete backward
@@ -68,6 +68,10 @@ bindkey -M viins "^F" vi-forward-word               # [Ctrl-f] - move to next wo
 bindkey -M viins "^E" vi-add-eol                    # [Ctrl-e] - move to end of line
 bindkey "^J" history-beginning-search-forward
 bindkey "^K" history-beginning-search-backward
+
+autoload -z edit-command-line
+zle -N edit-command-line
+bindkey "^X^E" edit-command-line
 
 # matches case insensitive for lowercase
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
