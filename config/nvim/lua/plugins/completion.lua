@@ -1,95 +1,47 @@
 return {
   {
-    "hrsh7th/nvim-cmp",
-    dependencies = {
-      "hrsh7th/cmp-nvim-lsp",
-      "hrsh7th/cmp-nvim-lua",
-      "hrsh7th/cmp-buffer",
-      "hrsh7th/cmp-path",
-      "zbirenbaum/copilot-cmp",
-      -- "onsails/lspkind-nvim",
-      {
-        "windwp/nvim-autopairs",
-        event = "InsertEnter",
-        config = true,
-        -- use opts = {} for passing setup options
-        -- this is equivalent to setup({}) function
+    "saghen/blink.cmp",
+    lazy = false,
+    dependencies = "rafamadriz/friendly-snippets",
+    version = "v0.*",
+    opts = {
+      highlight = {
+        use_nvim_cmp_as_default = true,
       },
-      {
-        "L3MON4D3/LuaSnip",
-        build = (function()
-          return "make install_jsregexp"
-        end)(),
-        dependencies = {
-          {
-            "rafamadriz/friendly-snippets",
-            config = function()
-              require("luasnip.loaders.from_vscode").lazy_load()
-            end,
-          },
-        },
-      },
-      "saadparwaiz1/cmp_luasnip", -- { "roobert/tailwindcss-colorizer-cmp.nvim", config = true },
-    },
-    config = function()
-      -- local lspkind = require("lspkind")
-      local cmp = require("cmp")
-      -- local tailwind_formatter = require("tailwindcss-colorizer-cmp").formatter
-      local luasnip = require("luasnip")
-      luasnip.config.setup({})
+      keymap = {
+        ["<C-h>"] = { "show", "show_documentation", "hide_documentation" },
+        ["<C-e>"] = { "hide" },
+        ["<C-y>"] = { "select_and_accept" },
 
-      cmp.setup({
-        ghost_text = { enabled = true },
-        snippet = {
-          expand = function(args)
-            luasnip.lsp_expand(args.body)
-          end,
+        ["<C-k>"] = { "select_prev", "fallback" },
+        ["<C-j>"] = { "select_next", "fallback" },
+
+        ["<C-b>"] = { "scroll_documentation_up", "fallback" },
+        ["<C-f>"] = { "scroll_documentation_down", "fallback" },
+
+        ["<Tab>"] = { "snippet_forward", "fallback" },
+        ["<S-Tab>"] = { "snippet_backward", "fallback" },
+      },
+      nerd_font_variant = "mono",
+      -- trigger = { signature_help = { enabled = true } },
+      windows = {
+        autocomplete = {
+          border = "rounded",
         },
-        completion = { completeopt = "menu,menuone,noinsert" },
-        mapping = {
-          ["<C-j>"] = cmp.mapping.select_next_item(),
-          ["<C-k>"] = cmp.mapping.select_prev_item(),
-          ["<C-d>"] = cmp.mapping.scroll_docs(-4),
-          ["<C-f>"] = cmp.mapping.scroll_docs(4),
-          ["<C-y>"] = cmp.mapping.complete(),
-          ["<C-e>"] = cmp.mapping.close(),
-          ["<CR>"] = cmp.mapping.confirm({ select = true }),
-          ["<C-n>"] = cmp.mapping(function()
-            if luasnip.expand_or_locally_jumpable() then
-              luasnip.expand_or_jump()
-            end
-          end, { "i", "s" }),
-          ["<C-p>"] = cmp.mapping(function()
-            if luasnip.locally_jumpable(-1) then
-              luasnip.jump(-1)
-            end
-          end, { "i", "s" }),
+        documentation = {
+          border = "rounded",
+          min_width = 10,
+          max_width = 120,
+          auto_show_delay_ms = 0,
         },
-        sources = cmp.config.sources({
-          { name = "nvim_lsp" },
-          { name = "buffer", keyword_length = 5, max_item_count = 5 },
-          { name = "path" },
-          { name = "copilot" },
-          { name = "luasnip" },
-          { name = "nvim_lua" },
-        }),
-        -- formatting = {
-        --   fields = { cmp.ItemField.Menu, cmp.ItemField.Abbr, cmp.ItemField.Kind },
-        --   format = lspkind.cmp_format({
-        --     with_text = true,
-        --     before = tailwind_formatter,
-        --   }),
-        -- },
-        window = {
-          completion = {
-            border = "rounded",
-          },
-          documentation = {
-            border = "rounded",
-          },
+        signature_help = {
+          min_width = 1,
+          max_width = 120,
+          max_height = 10,
+          border = "rounded",
         },
-      })
-    end,
+      },
+    },
   },
   {
     "jackMort/ChatGPT.nvim",

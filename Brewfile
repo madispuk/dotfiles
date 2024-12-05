@@ -35,7 +35,7 @@ brew "python" # python (latest)
 brew "noti" # utility to display notifications from scripts
 brew "cloc" # lines of code counter
 brew "entr" # file watcher / command runner
-brew "exa" # ls alternative
+brew "eza" # ls alternative
 brew "fd" # find alternative
 brew "fzf" # Fuzzy file searcher, used in scripts and in vim
 brew "git-delta" # a better git diff

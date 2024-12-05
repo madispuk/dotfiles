@@ -11,8 +11,8 @@ return {
         keymap = {
           accept = "<C-L>",
           close = "<Esc>",
-          next = "<C-J>",
-          prev = "<C-K>",
+          -- next = "<C-J>",
+          -- prev = "<C-K>",
           select = "<C-L>",
           dismiss = "<C-X>",
         },

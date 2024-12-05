@@ -238,7 +238,7 @@ return {
   {
     "nvim-lualine/lualine.nvim",
     enabled = true,
-    event = "VeryLazy",
+    -- event = "VeryLazy",
     opts = function(plugin)
       if plugin.override then
         require("lazyvim.util").deprecate("lualine.override", "lualine.opts")

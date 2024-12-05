@@ -51,13 +51,22 @@ return {
       },
     },
   },
-  {
-    "vhyrro/luarocks.nvim",
-    priority = 1000,
-    config = true,
-    opts = {
-      rocks = { "lua-curl", "nvim-nio", "mimetypes", "xml2lua" },
-    },
-  },
+  -- {
+  --   "vhyrro/luarocks.nvim",
+  --   priority = 1000,
+  --   config = true,
+  --   opts = {
+  --     rocks = { "lua-curl", "nvim-nio", "mimetypes", "xml2lua" },
+  --   },
+  -- },
   "WhoIsSethDaniel/mason-tool-installer.nvim",
+  {
+    "akinsho/flutter-tools.nvim",
+    lazy = false,
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "stevearc/dressing.nvim", -- optional for vim.ui.select
+    },
+    config = true,
+  },
 }

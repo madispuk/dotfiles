@@ -13,17 +13,17 @@ alias df='df -h' # disk free, in Gigabytes, not bytes
 alias du='du -h -c' # calculate disk usage for a folder
 
 # list the PATH separated by new lines
-alias lpath='echo $PATH | tr ":" "\n"' 
+alias lpath='echo $PATH | tr ":" "\n"'
 
 # recursively delete `.DS_Store` files
 alias cleanup="find . -name '*.DS_Store' -type f -ls -delete"
 
 alias cat='bat'
 
-# use exa if available
-if [[ -x "$(command -v exa)" ]]; then
-  alias ll="exa --icons --git --long"
-  alias l="exa --icons --git --all --long"
+# use eza if available
+if [[ -x "$(command -v eza)" ]]; then
+  alias ll="eza --icons --git --long"
+  alias l="eza --icons --git --all --long"
 else
   alias l="ls -lah ${colorflag}"
   alias ll="ls -lFh ${colorflag}"
