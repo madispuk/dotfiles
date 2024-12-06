@@ -12,6 +12,9 @@ cask "visual-studio-code" # if neovim is dragons
 cask "firefox@nightly"
 cask "font-hack"
 cask "font-symbols-only-nerd-font"
+cask "flux"
+cask "slack"
+cask "docker"
 
 # packages
 brew "nvm" # node version manager
