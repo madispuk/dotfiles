@@ -1,29 +1,20 @@
 # vim:ft=ruby
 
 # taps
-tap "homebrew/cask"
-tap "homebrew/cask-fonts"
 tap "homebrew/bundle"
-tap "homebrew/core"
 tap "koekeishiya/formulae"
 
 # Applications
 cask "kitty" # a better terminal emulator
 cask "imageoptim" # a tool to optimize images
-cask "1password/tap/1password-cli"
-
-# Aerospace
 cask "nikitabobko/tap/aerospace"
-
-# Fonts
-cask "font-fira-code"
-cask "font-jetbrains-mono"
-cask "font-cascadia-mono"
-cask "font-symbols-only-nerd-font"
-cask "font-recursive-code"
+cask "visual-studio-code" # if neovim is dragons
+cask "firefox@nightly"
 cask "font-hack"
+cask "font-symbols-only-nerd-font"
 
 # packages
+brew "nvm" # node version manager
 brew "zsh" # zsh (latest)
 brew "tmux" # terminal multiplexer
 brew "git" # Git version control (latest version)
@@ -55,3 +46,5 @@ brew "wget" # internet file retriever
 brew "z" # switch between most used directories
 brew "zoxide" # switch between most used directories
 brew "stow" # symlink farm manager
+brew "zsh-syntax-highlighting"
+brew "zsh-autosuggestions"

@@ -12,10 +12,10 @@ fi
 autoload -U compinit add-zsh-hook
 compinit
 
-prepend_path /usr/local/opt/grep/libexec/gnubin
-prepend_path /usr/local/sbin
-prepend_path $DOTFILES/bin
-prepend_path $HOME/bin
+## Add $DOTFILES/bin to PATH if it's not already included
+if [[ ":$PATH:" != *":$HOME/$DOTFILES/bin:"* ]]; then
+    export PATH="$HOME/$DOTFILES/bin:$PATH"
+fi
 
 # define the code directory
 # This is where my code exists and where I want the `c` autocomplete to work from exclusively
@@ -95,14 +95,9 @@ zstyle ':completion:*' group-name ''
 
 export ZPLUGDIR="$CACHEDIR/zsh/plugins"
 [[ -d "$ZPLUGDIR" ]] || mkdir -p "$ZPLUGDIR"
-# array containing plugin information (managed by zfetch)
-typeset -A plugins
 
-zfetch mafredri/zsh-async async.plugin.zsh
-zfetch zsh-users/zsh-syntax-highlighting
-zfetch zsh-users/zsh-autosuggestions
-zfetch grigorii-zander/zsh-npm-scripts-autocomplete
-zfetch Aloxaf/fzf-tab
+source "$(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+source <(fzf --zsh)
 
 if [[ -x "$(command -v fnm)" ]]; then
     eval "$(fnm env --use-on-cd)"
@@ -114,12 +109,9 @@ fi
 # Setup
 ########################################################
 
-if [ -f $HOME/.fzf.zsh ]; then
-  source $HOME/.fzf.zsh
-  export FZF_DEFAULT_COMMAND='fd --type f'
-  export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-  export FZF_DEFAULT_OPTS="--color bg:-1,bg+:-1,fg:-1,fg+:#feffff,hl:#993f84,hl+:#d256b5,info:#676767,prompt:#676767,pointer:#676767"
-fi
+export FZF_DEFAULT_COMMAND='fd --type f'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_DEFAULT_OPTS="--color bg:-1,bg+:-1,fg:-1,fg+:#feffff,hl:#993f84,hl+:#d256b5,info:#676767,prompt:#676767,pointer:#676767"
 
 # add color to man pages
 export MANROFFOPT='-c'
@@ -137,12 +129,6 @@ export LESS_TERMCAP_mh=$(tput dim)
 if [[ -x "$(command -v zoxide)" ]]; then
     eval "$(zoxide init zsh --cmd cd --hook pwd)"
 fi
-# else
-#   # source z.sh if it exists
-#   zpath="$(brew --prefix)/etc/profile.d/z.sh"
-#   if [ -f "$zpath" ]; then
-#       source "$zpath"
-#   fi
 
 # Detect which `ls` flavor is in use
 if ls --color > /dev/null 2>&1; then # GNU `ls`
@@ -150,12 +136,6 @@ if ls --color > /dev/null 2>&1; then # GNU `ls`
 else # macOS `ls`
     colorflag="-G"
 fi
-
-# look for all .zsh files and source them
-config_files=($DOTFILES/**/*.zsh)
-for file in $config_files[@]; do
-  source "$file"
-done
 
 # If a ~/.zshrc.local exists, source it
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
@@ -165,3 +145,79 @@ done
  export NVM_DIR="$HOME/.nvm"
 [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
 [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+
+autoload -Uz vcs_info
+autoload -Uz add-zsh-hook
+setopt prompt_subst
+
+zstyle ':vcs_info:*' enable git
+zstyle ':vcs_info:git*' formats ' %b'
+
+exists() {
+  command -v "$1" >/dev/null 2>&1
+}
+
+bold() {
+    echo -n "%B$1%b"
+}
+
+write() {
+    local color content bold
+    [[ -n "$1" ]] && color="%F{$1}" || color="%f"
+    [[ -n "$2" ]] && content="$2" || content=""
+
+    [[ -z "$2" ]] && content="$1"
+
+    echo -n "$color"
+    echo -n "$content"
+    echo -n "%{%b%f%}"
+}
+
+is_git() {
+    [[ $(command git rev-parse --is-inside-work-tree 2>/dev/null) == true ]]
+}
+
+PROMPT_SYMBOL='▷'
+
+add-zsh-hook precmd () {
+    print -P "\n\e[1m%F{075}%~\e[0m "
+}
+
+export PROMPT='%(?.%F{006}.%F{009})$PROMPT_SYMBOL%f '
+
+########################################################
+# Aliases
+########################################################
+#
+# reload zsh config
+alias reload!='RELOAD=1 source ~/.zshrc'
+
+# jump up in dir tree
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....="cd ../../.."
+alias .....="cd ../../../.."
+
+# pretty print some cmds
+alias grep='grep --color=auto'
+alias df='df -h' # disk free, in Gigabytes, not bytes
+alias du='du -h -c' # calculate disk usage for a folder
+
+# list the PATH separated by new lines
+alias lpath='echo $PATH | tr ":" "\n"'
+
+# recursively delete `.DS_Store` files
+alias cleanup="find . -name '*.DS_Store' -type f -ls -delete"
+
+alias cat='bat'
+
+# use eza if available
+if [[ -x "$(command -v eza)" ]]; then
+  alias ll="eza --icons --git --long"
+  alias l="eza --icons --git --all --long"
+else
+  alias l="ls -lah ${colorflag}"
+  alias ll="ls -lFh ${colorflag}"
+fi
+
+alias vim="nvim"

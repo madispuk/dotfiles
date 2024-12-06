@@ -1,3 +1,3 @@
 # Dotfiles
 
-Thanks to nicknisi/dotfiles.git
+./install.sh
