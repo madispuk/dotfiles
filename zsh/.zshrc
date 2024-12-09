@@ -227,3 +227,5 @@ alias gs="git s"
 alias glog="git l"
 alias gb="git branch"
 alias gl="git pull"
+
+export PATH="$HOMEBREW_PREFIX/opt/postgresql@15/bin:$PATH"
