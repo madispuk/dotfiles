@@ -15,6 +15,9 @@ cask "font-symbols-only-nerd-font"
 cask "flux"
 cask "slack"
 cask "docker"
+cask "google-cloud-sdk"
+cask "1password"
+cask "dbeaver-community"
 
 # packages
 brew "nvm" # node version manager
@@ -51,3 +54,5 @@ brew "zoxide" # switch between most used directories
 brew "stow" # symlink farm manager
 brew "zsh-syntax-highlighting"
 brew "zsh-autosuggestions"
+brew "k9s"
+brew "kubectx"

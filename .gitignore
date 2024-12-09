@@ -1,10 +1,11 @@
 .netrwhist
 npm-debug.log
-config/nvim/spell
-config/nvim/shada
-vim/vim.symlink/spell/
-vim/vim.symlink/plugged/
+# config/nvim/spell
+# config/nvim/shada
+# vim/vim.symlink/spell/
+# vim/vim.symlink/plugged/
 Brewfile.lock.json
 lazy-lock.json
-config/kitty/kitty-overrides.conf
-config/tmux/plugins
+config/.config/kitty/kitty-overrides.conf
+config/.config/tmux/plugins
+config/.config/bat/themes

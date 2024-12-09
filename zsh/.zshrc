@@ -222,3 +222,8 @@ else
 fi
 
 alias vim="nvim"
+
+alias gs="git s"
+alias glog="git l"
+alias gb="git branch"
+alias gl="git pull"
