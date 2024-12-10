@@ -18,6 +18,7 @@ cask "docker"
 cask "google-cloud-sdk"
 cask "1password"
 cask "dbeaver-community"
+cask "spotify"
 
 # packages
 brew "nvm" # node version manager
