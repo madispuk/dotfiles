@@ -19,6 +19,7 @@ cask "google-cloud-sdk"
 cask "1password"
 cask "dbeaver-community"
 cask "spotify"
+cask "vlc"
 
 # packages
 brew "nvm" # node version manager
@@ -60,3 +61,4 @@ brew "kubectx"
 brew "sops"
 brew "postgresql@15"
 brew "pv"
+brew "ffmpeg"

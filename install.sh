@@ -117,6 +117,9 @@ defaults -currentHost write -globalDomain com.apple.mouse.tapBehavior -int 1
 echo "Disable showing recent apps"
 defaults write com.apple.dock show-recents -bool false
 
+echo "Save screenshots in a directory"
+defaults write com.apple.screencapture location ~/Desktop/screenshots
+
 echo "Kill affected applications"
 
 for app in Safari Finder Dock Mail SystemUIServer; do killall "$app" >/dev/null 2>&1; done
