@@ -20,6 +20,7 @@ cask "1password"
 cask "dbeaver-community"
 cask "spotify"
 cask "vlc"
+cask "chatgpt"
 
 # packages
 brew "nvm" # node version manager
@@ -62,3 +63,5 @@ brew "sops"
 brew "postgresql@15"
 brew "pv"
 brew "ffmpeg"
+brew "awscli"
+brew "nmap"

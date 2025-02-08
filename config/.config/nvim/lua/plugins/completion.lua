@@ -5,9 +5,9 @@ return {
     dependencies = "rafamadriz/friendly-snippets",
     version = "v0.*",
     opts = {
-      highlight = {
-        use_nvim_cmp_as_default = true,
-      },
+      -- highlight = {
+      --   use_nvim_cmp_as_default = true,
+      -- },
       keymap = {
         ["<C-h>"] = { "show", "show_documentation", "hide_documentation" },
         ["<C-e>"] = { "hide" },
@@ -22,25 +22,25 @@ return {
         ["<Tab>"] = { "snippet_forward", "fallback" },
         ["<S-Tab>"] = { "snippet_backward", "fallback" },
       },
-      nerd_font_variant = "mono",
+      -- nerd_font_variant = "mono",
       -- trigger = { signature_help = { enabled = true } },
-      windows = {
-        autocomplete = {
-          border = "rounded",
-        },
-        documentation = {
-          border = "rounded",
-          min_width = 10,
-          max_width = 120,
-          auto_show_delay_ms = 0,
-        },
-        signature_help = {
-          min_width = 1,
-          max_width = 120,
-          max_height = 10,
-          border = "rounded",
-        },
-      },
+      -- windows = {
+      --   autocomplete = {
+      --     border = "rounded",
+      --   },
+      --   documentation = {
+      --     border = "rounded",
+      --     min_width = 10,
+      --     max_width = 120,
+      --     auto_show_delay_ms = 0,
+      --   },
+      --   signature_help = {
+      --     min_width = 1,
+      --     max_width = 120,
+      --     max_height = 10,
+      --     border = "rounded",
+      --   },
+      -- },
     },
   },
   {

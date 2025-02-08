@@ -120,6 +120,9 @@ defaults write com.apple.dock show-recents -bool false
 echo "Save screenshots in a directory"
 defaults write com.apple.screencapture location ~/Desktop/screenshots
 
+echo "Disable force click"
+defaults write com.apple.AppleMultitouchTrackpad ForceSuppressed -bool true
+
 echo "Kill affected applications"
 
 for app in Safari Finder Dock Mail SystemUIServer; do killall "$app" >/dev/null 2>&1; done
