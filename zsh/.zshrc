@@ -1,9 +1,5 @@
 export ZSH=$DOTFILES/zsh
 
-if [[ -d $DOTFILES/zsh/functions ]]; then
-    for func in $DOTFILES/zsh/functions/*(:t); autoload -U $func
-fi
-
 ########################################################
 # Configuration
 ########################################################
@@ -46,26 +42,12 @@ setopt HIST_IGNORE_ALL_DUPS      # delete old recorded entry if new entry is a d
 setopt COMPLETE_ALIASES
 
 # make terminal command navigation sane again
-bindkey "^[[1;5C" forward-word                      # [Ctrl-right] - forward one word
-bindkey "^[[1;5D" backward-word                     # [Ctrl-left] - backward one word
-bindkey '^[^[[C' forward-word                       # [Ctrl-right] - forward one word
-bindkey '^[^[[D' backward-word                      # [Ctrl-left] - backward one word
-bindkey '^[[1;3D' beginning-of-line                 # [Alt-left] - beginning of line
-bindkey '^[[1;3C' end-of-line                       # [Alt-right] - end of line
-bindkey '^[[5D' beginning-of-line                   # [Alt-left] - beginning of line
-bindkey '^[[5C' end-of-line                         # [Alt-right] - end of line
+bindkey '^[[1;3D' backward-word      # Option/Cmd-left
+bindkey '^[[1;3C' forward-word       # Option/Cmd-right
+
 bindkey '^?' backward-delete-char                   # [Backspace] - delete backward
 bindkey '^Y' kill-line                              # [Ctrl-y] - remove until end of line
-if [[ "${terminfo[kdch1]}" != "" ]]; then
-    bindkey "${terminfo[kdch1]}" delete-char        # [Delete] - delete forward
-else
-    bindkey "^[[3~" delete-char                     # [Delete] - delete forward
-    bindkey "^[3;5~" delete-char
-    bindkey "\e[3~" delete-char
-fi
 bindkey "^A" vi-beginning-of-line
-bindkey -M viins "^F" vi-forward-word               # [Ctrl-f] - move to next word
-bindkey -M viins "^E" vi-add-eol                    # [Ctrl-e] - move to end of line
 bindkey "^J" history-beginning-search-forward
 bindkey "^K" history-beginning-search-backward
 
@@ -100,10 +82,6 @@ source "$(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.z
 source "$(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
 source <(fzf --zsh)
 
-if [[ -x "$(command -v fnm)" ]]; then
-    eval "$(fnm env --use-on-cd)"
-fi
-
 [[ -e ~/.terminfo ]] && export TERMINFO_DIRS=~/.terminfo:/usr/share/terminfo
 
 ########################################################
@@ -127,8 +105,8 @@ export LESS_TERMCAP_mr=$(tput rev)
 export LESS_TERMCAP_mh=$(tput dim)
 
 # prefer zoxide over z.sh
-if [[ -x "$(command -v zoxide)" ]]; then
-    eval "$(zoxide init zsh --cmd cd --hook pwd)"
+if [[ -o interactive ]] && [[ -t 1 ]] && command -v zoxide >/dev/null 2>&1; then
+  eval "$(zoxide init zsh --cmd cd --hook pwd)"
 fi
 
 # Detect which `ls` flavor is in use

@@ -9,15 +9,15 @@ return {
       "nvim-telescope/telescope-node-modules.nvim",
     },
     config = function()
-      require("telescope").setup({
+      local telescope = require("telescope")
+
+      telescope.setup({
         defaults = {
           mappings = {
             i = {
               ["<Esc>"] = require("telescope.actions").close, -- don't go into normal mode, just close
               ["<C-j>"] = require("telescope.actions").move_selection_next,
               ["<C-k>"] = require("telescope.actions").move_selection_previous,
-              -- ["<C-y>"] = require("telescope.actions").preview_scrolling_up,
-              -- ["<C-e>"] = require("telescope.actions").preview_scrolling_down,
             },
           },
           vimgrep_arguments = {
@@ -78,6 +78,10 @@ return {
         },
       })
 
+      -- Load extensions
+      telescope.load_extension("fzf")
+      telescope.load_extension("node_modules")
+
       local nnoremap = require("utils").nnoremap
       nnoremap("<leader>ft", "<cmd>Telescope<cr>", { desc = "telescope: open" })
       nnoremap("<leader>ff", "<cmd>Telescope find_files<cr>", { desc = "telescope: all files" })
@@ -85,6 +89,7 @@ return {
       nnoremap("<leader>r", "<cmd>Telescope buffers<cr>", { desc = "telescope: open buffers" })
       nnoremap("<leader>fn", "<cmd>Telescope node_modules list<cr>", { desc = "telescope: node modules" })
       nnoremap("<leader>fg", "<cmd>Telescope live_grep<cr>", { desc = "telescope: live grep" })
+      nnoremap("<leader>fs", "<cmd>Telescope git_status<cr>", { desc = "telescope: git status" })
     end,
   },
 }

@@ -1,103 +1,172 @@
-local formatters = {
-  javascript = { "prettier" },
-  javascriptreact = { "prettier" },
-  typescript = { "prettier" },
-  typescriptreact = { "prettier" },
-  astro = { "prettier" },
-  json = { "prettier" },
-  jsonc = { "prettier" },
-  html = { "prettier" },
-  yaml = { "prettier" },
-  css = { "stylelint", "prettier" },
-  sh = { "shellcheck", "shfmt" },
-  lua = { "stylua" },
-}
-
-local border = {
-  { "🭽", "FloatBorder" },
-  { "▔", "FloatBorder" },
-  { "🭾", "FloatBorder" },
-  { "▕", "FloatBorder" },
-  { "🭿", "FloatBorder" },
-  { "▁", "FloatBorder" },
-  { "🭼", "FloatBorder" },
-  { "▏", "FloatBorder" },
-}
-
 return {
   {
-    "neovim/nvim-lspconfig",
+    "williamboman/mason.nvim",
     lazy = false,
-    dependencies = {
-      -- Helpers to install LSPs and maintain them
-      { "williamboman/mason.nvim", version = "^1.0.0" },
-      { "williamboman/mason-lspconfig.nvim", version = "^1.0.0" },
-      "saghen/blink.cmp",
-    },
     config = function()
-      local capabilities = vim.lsp.protocol.make_client_capabilities()
-      local servers = {
-        ts_ls = {
-          handlers = {
-            ["textDocument/definition"] = function(err, result, ctx, ...)
-              if #result > 1 then
-                result = { result[1] }
-              end
-              vim.lsp.handlers["textDocument/definition"](err, result, ctx, ...)
-            end,
-          },
-          root_markers = { "tsconfig.json" },
-        },
-        -- eslint = {},
-        tailwindcss = {
-          settings = {
-            tailwindCSS = {
-              lint = {
-                cssConflict = "warning",
-                invalidApply = "error",
-                invalidConfigPath = "error",
-                invalidScreen = "error",
-                invalidTailwindDirective = "error",
-                recommendedVariantOrder = "warning",
-                unusedClass = "warning",
-              },
-              experimental = {},
-              validate = true,
-            },
-          },
-        },
-        stylua = {},
-        lua_ls = {
-          settings = {
-            Lua = {
-              completion = {
-                callSnippet = "Replace",
-              },
-              diagnostics = {
-                globals = { "vim" },
-              },
-            },
-          },
-        },
-        vimls = {},
-        jsonls = {},
-        pyright = {},
-        html = {},
+      require("mason").setup({ ui = { check_outdated_packages_on_open = true } })
+
+      local mason_packages = {
+        "typescript-language-server",
+        "tailwindcss-language-server",
+        "lua-language-server",
+        "vim-language-server",
+        "json-lsp",
+        "basedpyright",
+        "ruff",
+        "html-lsp",
+        "htmlhint",
+      }
+      require("mason-tool-installer").setup({ ensure_installed = mason_packages })
+    end,
+  },
+
+  -- Native LSP configuration
+  {
+    name = "lsp-config",
+    dir = vim.fn.stdpath("config"),
+    lazy = false,
+    config = function()
+      -- TypeScript/JavaScript
+      vim.lsp.config.ts_ls = {
+        cmd = { "typescript-language-server", "--stdio" },
+        filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
+        root_markers = { "package.json", "tsconfig.json", "jsconfig.json", ".git" },
+        -- handlers = {
+        --   ["textDocument/definition"] = function(err, result, ctx, ...)
+        --     if result and #result > 1 then
+        --       result = { result[1] }
+        --     end
+        --     vim.lsp.handlers["textDocument/definition"](err, result, ctx, ...)
+        --   end,
+        -- },
+        -- settings = {
+        --   typescript = {
+        --     inlayHints = {
+        --       includeInlayParameterNameHints = "all",
+        --       includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+        --       includeInlayFunctionParameterTypeHints = true,
+        --       includeInlayVariableTypeHints = true,
+        --       includeInlayPropertyDeclarationTypeHints = true,
+        --       includeInlayFunctionLikeReturnTypeHints = true,
+        --       includeInlayEnumMemberValueHints = true,
+        --     },
+        --     preferences = {
+        --       importModuleSpecifier = "relative",
+        --     },
+        --   },
+        --   javascript = {
+        --     inlayHints = {
+        --       includeInlayParameterNameHints = "all",
+        --       includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+        --       includeInlayFunctionParameterTypeHints = true,
+        --       includeInlayVariableTypeHints = true,
+        --       includeInlayPropertyDeclarationTypeHints = true,
+        --       includeInlayFunctionLikeReturnTypeHints = true,
+        --       includeInlayEnumMemberValueHints = true,
+        --     },
+        --     preferences = {
+        --       importModuleSpecifier = "relative",
+        --     },
+        --   },
+        -- },
       }
 
-      require("mason").setup({ ui = { border = border } })
-      local ensure_installed = vim.tbl_keys(servers or {})
-      require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
-      require("mason-lspconfig").setup({
-        handlers = {
-          function(server_name)
-            local server = servers[server_name] or {}
-            server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
-            vim.lsp.config(server_name, server)
-          end,
+      -- Tailwind CSS
+      vim.lsp.config.tailwindcss = {
+        cmd = { "tailwindcss-language-server", "--stdio" },
+        filetypes = { "html", "css", "scss", "javascript", "javascriptreact", "typescript", "typescriptreact" },
+        root_markers = { "tailwind.config.js", "tailwind.config.ts", "package.json", ".git" },
+        settings = {
+          tailwindCSS = {
+            lint = {
+              cssConflict = "warning",
+              invalidApply = "error",
+              invalidConfigPath = "error",
+              invalidScreen = "error",
+              invalidTailwindDirective = "error",
+              recommendedVariantOrder = "warning",
+              unusedClass = "warning",
+            },
+            validate = true,
+          },
         },
-      })
+      }
 
+      -- Lua
+      vim.lsp.config.lua_ls = {
+        cmd = { "lua-language-server" },
+        filetypes = { "lua" },
+        root_markers = {
+          ".luarc.json",
+          ".luarc.jsonc",
+          ".luacheckrc",
+          ".stylua.toml",
+          "stylua.toml",
+          "selene.toml",
+          "selene.yml",
+          ".git",
+        },
+        settings = {
+          Lua = {
+            completion = {
+              callSnippet = "Replace",
+            },
+            diagnostics = {
+              globals = { "vim" },
+            },
+          },
+        },
+      }
+
+      -- Vim
+      vim.lsp.config.vimls = {
+        cmd = { "vim-language-server", "--stdio" },
+        filetypes = { "vim" },
+        root_markers = { ".git" },
+      }
+
+      -- JSON
+      vim.lsp.config.jsonls = {
+        cmd = { "vscode-json-language-server", "--stdio" },
+        filetypes = { "json", "jsonc" },
+        root_markers = { ".git" },
+      }
+      -- Python
+      vim.lsp.config.basedpyright = {
+        name = "basedpyright",
+        filetypes = { "python" },
+        cmd = { "basedpyright-langserver", "--stdio" },
+        root_markers = { "pyproject.toml", "setup.py", "setup.cfg", "requirements.txt", "Pipfile", ".git" },
+        settings = {
+          basedpyright = {
+            disableOrganizeImports = true,
+            analysis = {
+              autoSearchPaths = true,
+              autoImportCompletions = true,
+              useLibraryCodeForTypes = true,
+              diagnosticMode = "openFilesOnly",
+              inlayHints = {
+                variableTypes = true,
+                callArgumentNames = true,
+                functionReturnTypes = true,
+                genericTypes = false,
+              },
+            },
+          },
+        },
+      }
+
+      -- HTML
+      vim.lsp.config.html = {
+        cmd = { "vscode-html-language-server", "--stdio" },
+        filetypes = { "html", "handlebars" },
+        root_markers = { "package.json", ".git" },
+      }
+
+      -- Enable all servers
+      vim.lsp.enable({ "ts_ls", "tailwindcss", "lua_ls", "vimls", "jsonls", "basedpyright", "html" })
+
+      -- LSP keymaps
       vim.api.nvim_create_autocmd("LspAttach", {
         group = vim.api.nvim_create_augroup("lsp-attach", { clear = true }),
         callback = function(event)
@@ -119,18 +188,63 @@ return {
     end,
   },
   {
+    "mfussenegger/nvim-lint",
+    config = function()
+      local lint = require("lint")
+      lint.linters_by_ft = {
+        handlebars = { "htmlhint" },
+        html = { "htmlhint" },
+      }
+      -- Disable doctype rule for partials/templates
+      lint.linters.htmlhint.args = {
+        "--format", "json",
+        "--rules", "doctype-first:false",
+      }
+      vim.api.nvim_create_autocmd({ "BufWritePost", "BufReadPost", "InsertLeave" }, {
+        callback = function()
+          require("lint").try_lint()
+        end,
+      })
+    end,
+  },
+  {
     "stevearc/conform.nvim",
     opts = {
       format_on_save = {
         timeout_ms = 2000,
         lsp_fallback = false,
       },
-      formatters_by_ft = formatters,
+      formatters_by_ft = {
+        javascript = { "prettier" },
+        javascriptreact = { "prettier" },
+        typescript = { "prettier" },
+        typescriptreact = { "prettier" },
+        python = { "ruff_fix", "ruff_format" },
+        astro = { "prettier" },
+        json = { "prettier" },
+        jsonc = { "prettier" },
+        html = { "prettier" },
+        liquid = { "prettier" },
+        yaml = { "prettier" },
+        css = { "stylelint", "prettier" },
+        sh = { "shellcheck", "shfmt" },
+        lua = { "stylua" },
+        handlebars = { "prettier" },
+        terraform = { "tofu_fmt" },
+        tf = { "tofu_fmt" },
+      },
     },
   },
   {
     "folke/trouble.nvim",
-    opts = {},
+    opts = {
+      auto_refresh = true,
+      focus = true,
+      preview = {
+        type = "main",
+        scratch = true,
+      },
+    },
     cmd = "Trouble",
     keys = {
       {
@@ -138,30 +252,13 @@ return {
         "<cmd>Trouble diagnostics toggle<cr>",
         desc = "Diagnostics (Trouble)",
       },
+      -- Inline diagnostic popup (not trouble-specific)
       {
-        "<leader>xX",
-        "<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
-        desc = "Buffer Diagnostics (Trouble)",
-      },
-      {
-        "<leader>cs",
-        "<cmd>Trouble symbols toggle focus=false<cr>",
-        desc = "Symbols (Trouble)",
-      },
-      {
-        "<leader>cl",
-        "<cmd>Trouble lsp toggle focus=false win.position=right<cr>",
-        desc = "LSP Definitions / references / ... (Trouble)",
-      },
-      {
-        "<leader>xL",
-        "<cmd>Trouble loclist toggle<cr>",
-        desc = "Location List (Trouble)",
-      },
-      {
-        "<leader>xQ",
-        "<cmd>Trouble qflist toggle<cr>",
-        desc = "Quickfix List (Trouble)",
+        "<leader>e",
+        function()
+          vim.diagnostic.open_float()
+        end,
+        desc = "Show diagnostic under cursor",
       },
     },
   },

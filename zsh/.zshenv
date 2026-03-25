@@ -13,12 +13,6 @@ export RIPGREP_CONFIG_PATH="$HOME/.config/ripgrep/config"
 
 [[ -f ~/.zshenv.local ]] && source ~/.zshenv.local
 
-fpath=(
-    $DOTFILES/zsh/functions
-    /usr/local/share/zsh/site-functions
-    $fpath
-)
-
 typeset -aU path
 
 export EDITOR='nvim'

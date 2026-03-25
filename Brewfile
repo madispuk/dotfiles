@@ -47,12 +47,12 @@ brew "jq" # work with JSON files in shell scripts
 brew "lazygit" # a better git UI
 brew "neofetch" # pretty system info
 brew "neovim" # A better vim
+brew "yazi" # terminal file manager
 brew "ripgrep" # very fast file searcher
 brew "shellcheck" # diagnostics for shell sripts
 brew "tree" # pretty-print directory contents
 brew "wdiff" # word differences in text files
 brew "wget" # internet file retriever
-brew "z" # switch between most used directories
 brew "zoxide" # switch between most used directories
 brew "stow" # symlink farm manager
 brew "zsh-syntax-highlighting"
@@ -65,3 +65,4 @@ brew "pv"
 brew "ffmpeg"
 brew "awscli"
 brew "nmap"
+brew "helm"

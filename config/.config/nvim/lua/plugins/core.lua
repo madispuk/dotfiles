@@ -1,15 +1,27 @@
 return {
+  -- ========================================
+  -- Core Editing Enhancements
+  -- ========================================
+  -- Comment/uncomment code with gc motions
   "tpope/vim-commentary",
-  "tpope/vim-unimpaired",
+  -- Surround text with quotes, brackets, tags, etc.
   "tpope/vim-surround",
+  -- Enable repeating plugin maps with .
   "tpope/vim-repeat",
+  -- Pairs of handy bracket mappings (]q, [q, ]b, [b, etc.)
+  "tpope/vim-unimpaired",
+  -- Automatically adjust shiftwidth and expandtab based on file
   "tpope/vim-sleuth",
+  -- Enhanced % matching for if/else, HTML tags, etc.
   {
     "andymass/vim-matchup",
     config = function()
       vim.g.matchup_matchparen_offscreen = { method = "popup" }
     end,
   },
+  -- ========================================
+  -- Git Integration
+  -- ========================================
   {
     "tpope/vim-fugitive",
     dependencies = { "tpope/vim-rhubarb" },
@@ -19,13 +31,40 @@ return {
       { "<leader>gb", "<cmd>G blame<cr>", desc = "read file from git" },
     },
   },
-  { "alvarosevilla95/luatab.nvim", config = true },
-  -- UI component library (used for neotree)
-  { "MunifTanjim/nui.nvim", lazy = true },
-  -- improve the default neovim interfaces, such as refactoring
-  { "stevearc/dressing.nvim", event = "VeryLazy" },
-  -- tools for helping with neovim development
-  { "folke/neodev.nvim", config = true },
+  {
+    "sindrets/diffview.nvim",
+    cmd = { "DiffviewOpen", "DiffviewFileHistory", "DiffviewClose" },
+    keys = {
+      {
+        "<leader>gd",
+        function()
+          if next(require("diffview.lib").views) == nil then
+            vim.cmd("DiffviewOpen")
+          else
+            vim.cmd("DiffviewClose")
+          end
+        end,
+        desc = "toggle diff view",
+      },
+      {
+        "<leader>gc",
+        function()
+          if next(require("diffview.lib").views) == nil then
+            vim.cmd("DiffviewOpen HEAD~1..HEAD")
+          else
+            vim.cmd("DiffviewClose")
+          end
+        end,
+        desc = "toggle diff view",
+      },
+      { "<leader>gh", "<cmd>DiffviewFileHistory %<cr>", desc = "file history" },
+    },
+    opts = {},
+  },
+
+  -- ========================================
+  -- Search & Replace
+  -- ========================================
   {
     "nvim-pack/nvim-spectre",
     dependencies = {
@@ -38,34 +77,41 @@ return {
       { "<leader>ss", "<cmd>lua require('spectre').open()<cr>", desc = "open spectre" },
     },
   },
+
+  -- ========================================
+  -- UI Components & Enhancements
+  -- ========================================
+  -- UI component library (used by noice and other plugins)
+  { "MunifTanjim/nui.nvim", lazy = true },
+  -- Improve default neovim UI interfaces (select, input, etc.)
+  { "stevearc/dressing.nvim", event = "VeryLazy" },
+  -- Tabline configuration
+  { "alvarosevilla95/luatab.nvim", config = true },
+
+  -- ========================================
+  -- Development Tools
+  -- ========================================
+  -- Neovim Lua development tools (replaces neodev for nvim 0.11+)
   {
-    "nat-418/boole.nvim",
+    "folke/lazydev.nvim",
+    ft = "lua",
     opts = {
-      mappings = {
-        increment = "<C-a>",
-        decrement = "<C-x>",
-      },
-      additions = {},
-      allow_caps_additions = {
-        { "enable", "disable" },
+      library = {
+        { path = "luvit-meta/library", words = { "vim%.uv" } },
       },
     },
   },
-  -- {
-  --   "vhyrro/luarocks.nvim",
-  --   priority = 1000,
-  --   config = true,
-  --   opts = {
-  --     rocks = { "lua-curl", "nvim-nio", "mimetypes", "xml2lua" },
-  --   },
-  -- },
+  -- Type definitions for Lua libraries (used by lazydev)
+  { "Bilal2453/luvit-meta", lazy = true },
+  -- Automatically install Mason tools
   "WhoIsSethDaniel/mason-tool-installer.nvim",
+  -- Flutter development tools
   {
     "akinsho/flutter-tools.nvim",
     lazy = false,
     dependencies = {
       "nvim-lua/plenary.nvim",
-      "stevearc/dressing.nvim", -- optional for vim.ui.select
+      "stevearc/dressing.nvim",
     },
     config = true,
   },

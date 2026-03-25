@@ -5,7 +5,6 @@ return {
     version = false,
     dependencies = {
       "nvim-treesitter/nvim-treesitter-textobjects",
-      "JoosepAlviste/nvim-ts-context-commentstring",
     },
     init = function(plugin)
       require("lazy.core.loader").add_to_rtp(plugin)
@@ -13,30 +12,36 @@ return {
     end,
     config = function(_, opts)
       require("nvim-treesitter.configs").setup(opts)
+      vim.treesitter.language.register("glimmer", "handlebars")
     end,
     opts = {
+      auto_install = true,
       ensure_installed = {
         "bash",
         "comment",
         "css",
         "diff",
+        "dockerfile",
         "git_rebase",
         "gitcommit",
         "gitignore",
+        "helm",
         "html",
+        "http",
         "javascript",
         "json",
+        "liquid",
         "lua",
         "markdown",
         "markdown_inline",
         "python",
+        "regex",
+        "toml",
         "tsx",
         "typescript",
         "vim",
-        "yaml",
         "xml",
-        "http",
-        "graphql",
+        "yaml",
       },
       incremental_selection = {
         enable = true,
@@ -49,7 +54,6 @@ return {
       },
       highlight = { enable = true, use_languagetree = true },
       indent = { enable = true },
-      rainbow = { enable = true, extended_mode = true, max_file_lines = 1000 },
       textobjects = {
         select = {
           enable = true,
@@ -63,8 +67,6 @@ return {
         },
         swap = {
           enable = false,
-          swap_next = { ["<leader>a"] = "@parameter.inner" },
-          swap_previous = { ["<leader>A"] = "@parameter.inner" },
         },
       },
     },
