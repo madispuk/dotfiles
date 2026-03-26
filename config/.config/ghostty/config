@@ -1,0 +1,15 @@
+# Ghostty Configuration
+# https://ghostty.org/docs/config
+
+# Theme
+theme = Catppuccin Mocha
+
+# Window
+window-padding-x = 5
+window-padding-y = 5
+macos-titlebar-style = hidden
+window-decoration = false
+
+# Mouse
+mouse-hide-while-typing = true
+copy-on-select = clipboard
