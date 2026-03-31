@@ -23,7 +23,7 @@ cask "vlc"
 cask "chatgpt"
 
 # packages
-brew "nvm" # node version manager
+brew "mise" # dev tool version manager
 brew "zsh" # zsh (latest)
 brew "tmux" # terminal multiplexer
 brew "git" # Git version control (latest version)

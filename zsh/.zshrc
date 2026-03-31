@@ -121,18 +121,8 @@ fi
 # If a ~/.localrc zshrc exists, source it
 [[ -a ~/.localrc ]] && source ~/.localrc
 
-export NVM_DIR="$HOME/.nvm"
-
-# Lazy load nvm - only load when nvm/node/npm/npx is first called
-_load_nvm() {
-  unset -f nvm node npm npx
-  [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && source "/opt/homebrew/opt/nvm/nvm.sh"
-  [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && source "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
-}
-nvm() { _load_nvm; nvm "$@"; }
-node() { _load_nvm; node "$@"; }
-npm() { _load_nvm; npm "$@"; }
-npx() { _load_nvm; npx "$@"; }
+# mise - dev tool version manager
+eval "$(mise activate zsh)"
 
 autoload -Uz vcs_info
 autoload -Uz add-zsh-hook
