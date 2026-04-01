@@ -2,8 +2,8 @@ return {
   -- ========================================
   -- Core Editing Enhancements
   -- ========================================
-  -- Comment/uncomment code with gc motions
-  "tpope/vim-commentary",
+  -- Enhance built-in comment support with JSX/TSX context awareness
+  { "folke/ts-comments.nvim", opts = {}, event = "VeryLazy" },
   -- Surround text with quotes, brackets, tags, etc.
   "tpope/vim-surround",
   -- Enable repeating plugin maps with .
