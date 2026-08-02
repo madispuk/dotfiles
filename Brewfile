@@ -41,9 +41,8 @@ brew "grep" # grep (latest)
 brew "highlight" # code syntax highlighting
 brew "jq" # work with JSON files in shell scripts
 brew "lazygit" # a better git UI
-# neovim is managed by mise (pinned to 0.11 in ~/.config/mise/config.toml).
-# The nvim-treesitter `master` branch config here is incompatible with nvim 0.12,
-# so we stay on the 0.11 line until migrating to the treesitter `main` branch.
+# neovim is managed by mise (pinned to 0.12 in ~/.config/mise/config.toml).
+brew "tree-sitter-cli" # required by nvim-treesitter `main` branch to build parsers
 brew "yazi" # terminal file manager
 brew "ripgrep" # very fast file searcher
 brew "shellcheck" # diagnostics for shell sripts

@@ -24,7 +24,7 @@ stow --target "$HOME" --no-folding config
 
 ### Neovim Configuration
 
-**IMPORTANT**: This configuration is for Neovim 0.11 and does not use any deprecated configuration options or APIs. When making changes, ensure compatibility with Neovim 0.11+ and avoid deprecated features.
+**IMPORTANT**: This configuration is for Neovim 0.12 (managed by mise, pinned in `~/.config/mise/config.toml`) and does not use any deprecated configuration options or APIs. When making changes, ensure compatibility with Neovim 0.12+ and avoid deprecated features. nvim-treesitter and nvim-treesitter-textobjects track their rewritten `main` branches (which require the `tree-sitter-cli` Homebrew package); the old `nvim-treesitter.configs` module-based setup API no longer exists.
 
 The Neovim configuration uses lazy.nvim as the plugin manager:
 

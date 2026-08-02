@@ -1,6 +1,8 @@
 return {
   {
     "saghen/blink.cmp",
+    -- Stay on stable v1 releases: the v2 line (main branch) is under active
+    -- development with breaking changes and needs the separate blink.lib plugin.
     version = "1.*",
     lazy = false,
     dependencies = {
