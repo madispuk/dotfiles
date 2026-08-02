@@ -2,9 +2,14 @@ return {
   {
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
+    -- Pin to the legacy `master` branch. The default `main` branch is a full,
+    -- incompatible rewrite that removed the `nvim-treesitter.configs` setup API,
+    -- `incremental_selection`, and the declarative highlight/indent/textobjects
+    -- options this config relies on. `version = false` had silently tracked it.
+    branch = "master",
     version = false,
     dependencies = {
-      "nvim-treesitter/nvim-treesitter-textobjects",
+      { "nvim-treesitter/nvim-treesitter-textobjects", branch = "master" },
     },
     init = function(plugin)
       require("lazy.core.loader").add_to_rtp(plugin)

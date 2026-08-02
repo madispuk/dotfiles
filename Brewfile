@@ -1,11 +1,10 @@
 # vim:ft=ruby
 
 # taps
-tap "homebrew/bundle"
 tap "koekeishiya/formulae"
 
 # Applications
-cask "kitty" # a better terminal emulator
+cask "ghostty" # a better terminal emulator
 cask "imageoptim" # a tool to optimize images
 cask "nikitabobko/tap/aerospace"
 cask "visual-studio-code" # if neovim is dragons
@@ -13,14 +12,11 @@ cask "firefox@nightly"
 cask "font-hack"
 cask "font-symbols-only-nerd-font"
 cask "flux"
-cask "slack"
 cask "docker"
-cask "google-cloud-sdk"
-cask "1password"
 cask "dbeaver-community"
 cask "spotify"
 cask "vlc"
-cask "chatgpt"
+cask "claude-code"
 
 # packages
 brew "mise" # dev tool version manager
@@ -45,8 +41,9 @@ brew "grep" # grep (latest)
 brew "highlight" # code syntax highlighting
 brew "jq" # work with JSON files in shell scripts
 brew "lazygit" # a better git UI
-brew "neofetch" # pretty system info
-brew "neovim" # A better vim
+# neovim is managed by mise (pinned to 0.11 in ~/.config/mise/config.toml).
+# The nvim-treesitter `master` branch config here is incompatible with nvim 0.12,
+# so we stay on the 0.11 line until migrating to the treesitter `main` branch.
 brew "yazi" # terminal file manager
 brew "ripgrep" # very fast file searcher
 brew "shellcheck" # diagnostics for shell sripts
@@ -57,12 +54,6 @@ brew "zoxide" # switch between most used directories
 brew "stow" # symlink farm manager
 brew "zsh-syntax-highlighting"
 brew "zsh-autosuggestions"
-brew "k9s"
-brew "kubectx"
-brew "sops"
-brew "postgresql@15"
 brew "pv"
 brew "ffmpeg"
-brew "awscli"
 brew "nmap"
-brew "helm"

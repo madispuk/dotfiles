@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+brew bundle
+
 function check_prog() {
     if ! hash "$1" > /dev/null 2>&1; then
         echo "Command not found: $1. Aborting..."
@@ -61,9 +63,6 @@ wget -P "$(bat --config-dir)/themes" https://github.com/catppuccin/bat/raw/main/
 
 bat cache --build
 
-# Gcloud
-gcloud components install gke-gcloud-auth-plugin
-
 # MacOS
 echo "Finder: show all filename extensions"
 defaults write NSGlobalDomain AppleShowAllExtensions -bool true
@@ -101,8 +100,16 @@ defaults write NSGlobalDomain KeyRepeat -int 1
 echo "Set a shorter Delay until key repeat"
 defaults write NSGlobalDomain InitialKeyRepeat -int 15
 
-echo "Enable tap to click (Trackpad)"
+echo "Enable tap to click (built-in and Bluetooth trackpad)"
+defaults write com.apple.AppleMultitouchTrackpad Clicking -bool true
 defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
+defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+
+echo "Enable two-finger tap to secondary (right) click"
+defaults write com.apple.AppleMultitouchTrackpad TrackpadRightClick -bool true
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadRightClick -bool true
+defaults -currentHost write NSGlobalDomain com.apple.trackpad.enableSecondaryClick -bool true
 
 echo "Reduce dock tile size"
 defaults write com.apple.dock tilesize -int 52
