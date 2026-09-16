@@ -79,6 +79,21 @@ return {
           },
         },
       },
+      -- Skip noisy LSP progress notifications from specific servers
+      -- (basedpyright reindexes constantly and spams the mini view bottom-right)
+      routes = {
+        {
+          filter = {
+            event = "lsp",
+            kind = "progress",
+            cond = function(message)
+              local client = vim.tbl_get(message.opts, "progress", "client")
+              return client == "basedpyright"
+            end,
+          },
+          opts = { skip = true },
+        },
+      },
       -- Control where different messages appear (or hide them entirely)
       -- routes = {
       --   -- Show file info (e.g., "123L, 4567B") in mini view instead of full notification

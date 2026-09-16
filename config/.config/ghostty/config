@@ -17,3 +17,8 @@ window-decoration = false
 # Mouse
 mouse-hide-while-typing = true
 copy-on-select = clipboard
+
+# Keybinds
+# Send a literal newline so TUIs (Claude Code, etc) insert a line break
+# instead of submitting. Passes through tmux as-is.
+keybind = shift+enter=text:\n

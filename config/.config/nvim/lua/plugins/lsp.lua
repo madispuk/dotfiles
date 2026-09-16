@@ -136,11 +136,12 @@ return {
         name = "basedpyright",
         filetypes = { "python" },
         cmd = { "basedpyright-langserver", "--stdio" },
-        root_markers = { "pyproject.toml", "setup.py", "setup.cfg", "requirements.txt", "Pipfile", ".git" },
+        root_markers = { "pyproject.toml", "setup.py", "setup.cfg", "requirements.txt", "Pipfile", "ruff.toml", ".ruff.toml", ".git" },
         settings = {
           basedpyright = {
             disableOrganizeImports = true,
             analysis = {
+              typeCheckingMode = "standard",
               autoSearchPaths = true,
               autoImportCompletions = true,
               useLibraryCodeForTypes = true,
@@ -156,6 +157,28 @@ return {
         },
       }
 
+      -- Python: ruff as linter / import-sorter / quick-fix source.
+      -- Config is discovered per-file by ruff itself (ruff.toml, .ruff.toml or
+      -- [tool.ruff] in pyproject.toml), so projects with a ruff.toml just work.
+      vim.lsp.config.ruff = {
+        name = "ruff",
+        cmd = { "ruff", "server" },
+        filetypes = { "python" },
+        root_markers = { "ruff.toml", ".ruff.toml", "pyproject.toml", ".git" },
+        init_options = {
+          settings = {
+            -- Only fallbacks: a project config file always wins over these.
+            lineLength = 100,
+            fixAll = true,
+            organizeImports = true,
+          },
+        },
+        on_attach = function(client)
+          -- basedpyright owns hover; ruff only provides diagnostics/code actions
+          client.server_capabilities.hoverProvider = false
+        end,
+      }
+
       -- HTML
       vim.lsp.config.html = {
         cmd = { "vscode-html-language-server", "--stdio" },
@@ -164,7 +187,7 @@ return {
       }
 
       -- Enable all servers
-      vim.lsp.enable({ "ts_ls", "tailwindcss", "lua_ls", "vimls", "jsonls", "basedpyright", "html" })
+      vim.lsp.enable({ "ts_ls", "tailwindcss", "lua_ls", "vimls", "jsonls", "basedpyright", "ruff", "html" })
 
       -- LSP keymaps
       vim.api.nvim_create_autocmd("LspAttach", {

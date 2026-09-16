@@ -200,6 +200,12 @@ fi
 
 alias vim="nvim"
 
+# k9s uses tcell, which only emits 24-bit color for a truecolor-capable
+# TERM. Under tmux-256color it downsamples the catppuccin skin to the
+# 256-color palette, so the body background lands on #1c1c1c instead of
+# mocha base #1e1e2e and no longer matches the terminal.
+alias k9s='TERM=xterm-256color command k9s'
+
 alias gs="git s"
 alias glog="git l"
 alias gb="git branch"
