@@ -1,8 +1,4 @@
 local icons = {
-  linux = " ",
-  macos = " ",
-  windows = " ",
-
   bug = "",
   hint = "󰌶 ",
   info = " ",

@@ -132,20 +132,39 @@ return {
   -- Floating statuslines. This is used to show buffer names in splits
   { "b0o/incline.nvim", opts = { hide = { cursorline = false, focused_win = false, only_win = true } } },
   {
-    "mhinz/vim-signify",
-    config = function(_, _)
-      vim.api.nvim_set_hl(0, "SignifySignAdd", { link = "GitSignsAdd" })
-      vim.api.nvim_set_hl(0, "SignifySignChange", { link = "GitSignsChange" })
-      vim.api.nvim_set_hl(0, "SignifySignChangeDelete", { link = "GitSignsChange" })
-      vim.api.nvim_set_hl(0, "SignifySignDelete", { link = "GitSignsDelete" })
-      vim.api.nvim_set_hl(0, "SignifySignDeleteFirstLine", { link = "GitSignsDelete" })
+    "lewis6991/gitsigns.nvim",
+    event = { "BufReadPre", "BufNewFile" },
+    opts = {
+      signs = {
+        add = { text = "▎" },
+        change = { text = "▎" },
+        delete = { text = "" },
+        topdelete = { text = "" },
+        changedelete = { text = "" },
+        untracked = { text = "▎" },
+      },
+      on_attach = function(bufnr)
+        local gs = require("gitsigns")
+        local function map(mode, lhs, rhs, desc)
+          vim.keymap.set(mode, lhs, rhs, { buffer = bufnr, desc = "Git: " .. desc })
+        end
 
-      vim.g.signify_sign_add = "▎"
-      vim.g.signify_sign_change = "▎"
-      vim.g.signify_sign_delete = ""
-      vim.g.signify_sign_delete_first_line = ""
-      vim.g.signify_sign_change_delete = ""
-    end,
+        map("n", "]h", function()
+          gs.nav_hunk("next")
+        end, "Next hunk")
+        map("n", "[h", function()
+          gs.nav_hunk("prev")
+        end, "Prev hunk")
+        map({ "n", "v" }, "<leader>hs", gs.stage_hunk, "Stage hunk")
+        map({ "n", "v" }, "<leader>hr", gs.reset_hunk, "Reset hunk")
+        map("n", "<leader>hp", gs.preview_hunk, "Preview hunk")
+        map("n", "<leader>hb", function()
+          gs.blame_line({ full = true })
+        end, "Blame line")
+        map("n", "<leader>hd", gs.diffthis, "Diff this")
+        map({ "o", "x" }, "ih", gs.select_hunk, "Select hunk")
+      end,
+    },
   },
   -- Catppuccin theme
   {
@@ -197,15 +216,14 @@ return {
         blink_cmp = true,
         cmp = false,
         fzf = true,
-        gitsigns = false,
+        gitsigns = true,
         lsp_trouble = true,
         markdown = true,
         mason = true,
         neotree = false,
         noice = true,
         notify = true,
-        signify = true,
-        telescope = true,
+        snacks = true,
         window_picker = true,
       },
       custom_highlights = function()

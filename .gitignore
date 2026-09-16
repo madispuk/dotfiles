@@ -6,6 +6,5 @@ npm-debug.log
 # vim/vim.symlink/plugged/
 Brewfile.lock.json
 lazy-lock.json
-config/.config/kitty/kitty-overrides.conf
 config/.config/tmux/plugins
 config/.config/bat/themes

@@ -82,11 +82,14 @@ vim.opt.fcs = "eob: ,diff: " -- hide ~ on empty lines, hide dashes in diff fille
 -- Diagnostics
 -- ============================================================================
 vim.diagnostic.config({
-  -- Show virtual text only for the most severe diagnostic per line
-  virtual_text = {
-    spacing = 4,
-    prefix = "●",
-  },
+  -- Diagnostics render as virtual lines under the cursor's line only. End-of-line
+  -- virtual text concatenated every diagnostic on a line into the right margin
+  -- (four diagnostics meant four bullets, messages truncated); virtual lines show
+  -- all of them stacked and in full, and only where the cursor is. `gK` toggles
+  -- always-on. Underline is back on: with virtual text gone it is the only
+  -- at-a-glance marker on lines the cursor is not on, alongside the sign column.
+  virtual_text = false,
+  virtual_lines = { current_line = true },
   -- Define diagnostic signs (modern way, not deprecated)
   signs = {
     text = {
@@ -96,7 +99,7 @@ vim.diagnostic.config({
       [vim.diagnostic.severity.HINT] = "󰌶",
     },
   },
-  underline = false,
+  underline = true,
   update_in_insert = false,
   severity_sort = true, -- Most severe diagnostic appears first
   float = {
@@ -106,6 +109,13 @@ vim.diagnostic.config({
     prefix = "",
   },
 })
+
+-- Toggle always-on virtual lines (:h diagnostic-toggle-virtual-lines-example)
+vim.keymap.set("n", "gK", function()
+  local showing_all = vim.diagnostic.config().virtual_lines == true
+  vim.diagnostic.config({ virtual_lines = showing_all and { current_line = true } or true })
+  vim.notify("diagnostics: " .. (showing_all and "current line" or "all lines"))
+end, { desc = "Toggle diagnostic virtual_lines (current line / all)" })
 
 -- ============================================================================
 -- Indentation

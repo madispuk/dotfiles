@@ -1,6 +1,6 @@
 return {
   {
-    "williamboman/mason.nvim",
+    "mason-org/mason.nvim",
     lazy = false,
     config = function()
       require("mason").setup({ ui = { check_outdated_packages_on_open = true } })
@@ -15,6 +15,7 @@ return {
         "ruff",
         "html-lsp",
         "htmlhint",
+        "prettier",
       }
       require("mason-tool-installer").setup({ ensure_installed = mason_packages })
     end,
@@ -136,7 +137,16 @@ return {
         name = "basedpyright",
         filetypes = { "python" },
         cmd = { "basedpyright-langserver", "--stdio" },
-        root_markers = { "pyproject.toml", "setup.py", "setup.cfg", "requirements.txt", "Pipfile", "ruff.toml", ".ruff.toml", ".git" },
+        root_markers = {
+          "pyproject.toml",
+          "setup.py",
+          "setup.cfg",
+          "requirements.txt",
+          "Pipfile",
+          "ruff.toml",
+          ".ruff.toml",
+          ".git",
+        },
         settings = {
           basedpyright = {
             disableOrganizeImports = true,
@@ -197,11 +207,11 @@ return {
             vim.keymap.set("n", keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
           end
 
-          map("gd", require("telescope.builtin").lsp_definitions, "Goto Definition")
-          map("gR", require("telescope.builtin").lsp_references, "Goto References")
-          map("gI", require("telescope.builtin").lsp_implementations, "Goto Implementation")
-          map("go", require("telescope.builtin").lsp_type_definitions, "Type Definition")
-          map("gw", require("telescope.builtin").lsp_dynamic_workspace_symbols, "Workspace Symbols")
+          map("gd", Snacks.picker.lsp_definitions, "Goto Definition")
+          map("gR", Snacks.picker.lsp_references, "Goto References")
+          map("gI", Snacks.picker.lsp_implementations, "Goto Implementation")
+          map("go", Snacks.picker.lsp_type_definitions, "Type Definition")
+          map("gw", Snacks.picker.lsp_workspace_symbols, "Workspace Symbols")
           map("ga", vim.lsp.buf.code_action, "Code Action")
           map("gr", vim.lsp.buf.rename, "Rename")
           map("K", vim.lsp.buf.hover, "Hover Documentation")
@@ -220,8 +230,10 @@ return {
       }
       -- Disable doctype rule for partials/templates
       lint.linters.htmlhint.args = {
-        "--format", "json",
-        "--rules", "doctype-first:false",
+        "--format",
+        "json",
+        "--rules",
+        "doctype-first:false",
       }
       vim.api.nvim_create_autocmd({ "BufWritePost", "BufReadPost", "InsertLeave" }, {
         callback = function()
@@ -235,7 +247,7 @@ return {
     opts = {
       format_on_save = {
         timeout_ms = 2000,
-        lsp_fallback = false,
+        lsp_format = "never",
       },
       formatters_by_ft = {
         javascript = { "prettier" },

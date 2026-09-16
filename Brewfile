@@ -35,17 +35,20 @@ brew "eza" # ls alternative
 brew "fd" # find alternative
 brew "fzf" # Fuzzy file searcher, used in scripts and in vim
 brew "git-delta" # a better git diff
+brew "gh" # github cli, used by the `git browse` alias
 brew "glow" # markdown viewer
 brew "gnupg" # GPG
 brew "grep" # grep (latest)
 brew "highlight" # code syntax highlighting
 brew "jq" # work with JSON files in shell scripts
+brew "k9s" # kubernetes TUI (aliased in .zshrc)
 brew "lazygit" # a better git UI
 # neovim is managed by mise (pinned to 0.12 in ~/.config/mise/config.toml).
 brew "tree-sitter-cli" # required by nvim-treesitter `main` branch to build parsers
 brew "yazi" # terminal file manager
 brew "ripgrep" # very fast file searcher
-brew "shellcheck" # diagnostics for shell sripts
+brew "shellcheck" # diagnostics for shell scripts
+brew "stylua" # lua formatter, used by conform.nvim
 brew "tree" # pretty-print directory contents
 brew "wdiff" # word differences in text files
 brew "wget" # internet file retriever

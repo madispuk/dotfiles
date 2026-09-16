@@ -15,14 +15,15 @@ check_prog stow
 stow --target "$HOME" zsh
 
 [[ -n "$(command -v brew)" ]] && zsh_path="$(brew --prefix)/bin/zsh" || zsh_path="$(which zsh)"
-    if ! grep "$zsh_path" /etc/shells; then
-        echo "$zsh_path" | sudo tee -a /etc/shells
-    fi
 
-    if [[ "$SHELL" != "$zsh_path" ]]; then
-        chsh -s "$zsh_path"
-        echo "default shell changed to $zsh_path"
-    fi
+if ! grep -q "$zsh_path" /etc/shells; then
+    echo "$zsh_path" | sudo tee -a /etc/shells
+fi
+
+if [[ "$SHELL" != "$zsh_path" ]]; then
+    chsh -s "$zsh_path"
+    echo "default shell changed to $zsh_path"
+fi
 
 # Config
 stow --target "$HOME" --no-folding config
@@ -33,7 +34,7 @@ CATPPUCCIN_DIR="$HOME/.config/tmux/plugins/catppuccin"
 if [ ! -d "$CATPPUCCIN_DIR" ]; then
     echo "Catppuccin Tmux plugin not found. Installing..."
     mkdir -p "$CATPPUCCIN_DIR"
-    git clone -b v2.1.1 https://github.com/catppuccin/tmux.git "$CATPPUCCIN_DIR"
+    git clone -b v2.3.0 https://github.com/catppuccin/tmux.git "$CATPPUCCIN_DIR"
     echo "Catppuccin Tmux plugin installed successfully."
 else
     echo "Catppuccin Tmux plugin is already installed."

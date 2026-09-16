@@ -43,7 +43,8 @@ return {
         "yaml",
       }
       local installed = ts_config.get_installed()
-      local missing = vim.iter(ensure_installed)
+      local missing = vim
+        .iter(ensure_installed)
         :filter(function(lang)
           return not vim.tbl_contains(installed, lang)
         end)

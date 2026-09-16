@@ -84,7 +84,6 @@ return {
   -- UI component library (used by noice and other plugins)
   { "MunifTanjim/nui.nvim", lazy = true },
   -- Improve default neovim UI interfaces (select, input, etc.)
-  { "stevearc/dressing.nvim", event = "VeryLazy" },
   -- Tabline configuration
   { "alvarosevilla95/luatab.nvim", config = true },
 
@@ -98,6 +97,9 @@ return {
     opts = {
       library = {
         { path = "luvit-meta/library", words = { "vim%.uv" } },
+        -- snacks declares `_G.Snacks` with full annotations, so loading it
+        -- resolves the global *and* gives completion/type info for it.
+        { path = "snacks.nvim", words = { "Snacks" } },
       },
     },
   },
@@ -105,14 +107,4 @@ return {
   { "Bilal2453/luvit-meta", lazy = true },
   -- Automatically install Mason tools
   "WhoIsSethDaniel/mason-tool-installer.nvim",
-  -- Flutter development tools
-  {
-    "akinsho/flutter-tools.nvim",
-    lazy = false,
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      "stevearc/dressing.nvim",
-    },
-    config = true,
-  },
 }

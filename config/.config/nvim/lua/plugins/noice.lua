@@ -25,7 +25,6 @@ return {
           auto_open = {
             enabled = true,
             trigger = true, -- Automatically trigger signature help
-            luasnip = true, -- Show signatures when navigating luasnip placeholders
             throttle = 50, -- Update every 50ms
           },
         },
@@ -33,7 +32,6 @@ return {
         override = {
           ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
           ["vim.lsp.util.stylize_markdown"] = true,
-          ["cmp.entry.get_documentation"] = true,
         },
       },
       -- you can enable a preset for easier configuration

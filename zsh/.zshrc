@@ -41,6 +41,11 @@ setopt HIST_IGNORE_ALL_DUPS      # delete old recorded entry if new entry is a d
 
 setopt COMPLETE_ALIASES
 
+# zsh picks a keymap from $EDITOR when neither -e nor -v is given; since
+# EDITOR=nvim that silently selected vi mode. State it explicitly so the
+# keymap no longer depends on $EDITOR. Swap to `bindkey -e` for emacs mode.
+bindkey -v
+
 # make terminal command navigation sane again
 bindkey '^[[1;3D' backward-word      # Option/Cmd-left
 bindkey '^[[1;3C' forward-word       # Option/Cmd-right
@@ -75,11 +80,8 @@ zstyle ':completion:*' group-name ''
 # Plugin setup
 ########################################################
 
-export ZPLUGDIR="$CACHEDIR/zsh/plugins"
-[[ -d "$ZPLUGDIR" ]] || mkdir -p "$ZPLUGDIR"
-
-source "$(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
-source "$(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
+source "$HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+source "$HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
 source <(fzf --zsh)
 
 [[ -e ~/.terminfo ]] && export TERMINFO_DIRS=~/.terminfo:/usr/share/terminfo
@@ -123,37 +125,6 @@ fi
 
 # mise - dev tool version manager
 eval "$(mise activate zsh)"
-
-autoload -Uz vcs_info
-autoload -Uz add-zsh-hook
-setopt prompt_subst
-
-zstyle ':vcs_info:*' enable git
-zstyle ':vcs_info:git*' formats ' %b'
-
-exists() {
-  command -v "$1" >/dev/null 2>&1
-}
-
-bold() {
-    echo -n "%B$1%b"
-}
-
-write() {
-    local color content bold
-    [[ -n "$1" ]] && color="%F{$1}" || color="%f"
-    [[ -n "$2" ]] && content="$2" || content=""
-
-    [[ -z "$2" ]] && content="$1"
-
-    echo -n "$color"
-    echo -n "$content"
-    echo -n "%{%b%f%}"
-}
-
-is_git() {
-    [[ $(command git rev-parse --is-inside-work-tree 2>/dev/null) == true ]]
-}
 
 PROMPT_SYMBOL='▷'
 
@@ -210,5 +181,3 @@ alias gs="git s"
 alias glog="git l"
 alias gb="git branch"
 alias gl="git pull"
-
-export PATH="$HOMEBREW_PREFIX/opt/postgresql@15/bin:$PATH"

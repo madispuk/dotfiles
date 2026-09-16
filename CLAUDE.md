@@ -34,7 +34,7 @@ The Neovim configuration uses lazy.nvim as the plugin manager:
 
 Key plugin files:
 - `plugins/lsp.lua` - LSP configuration
-- `plugins/telescope.lua` - Fuzzy finder setup
+- `plugins/snacks.lua` - Fuzzy finder (snacks.nvim picker)
 - `plugins/completion.lua` - Auto-completion
 - `plugins/treesitter.lua` - Syntax highlighting
 - `plugins/ui.lua` - UI enhancements (lualine, bufferline, etc)
@@ -42,7 +42,9 @@ Key plugin files:
 - `plugins/fzf.lua` - FZF integration
 - `plugins/core.lua` - Core editor plugins
 
-The `utils.lua` module provides keymap helper functions (`nmap`, `nnoremap`, `imap`, etc) that are used throughout the configuration.
+The `utils.lua` module provides keymap helper functions (`nmap`, `imap`, `vmap`, `nnoremap`, `xnoremap`, `onoremap`) that are used throughout the configuration. Only those six exist - do not assume other variants are available.
+
+Pickers go through `Snacks.picker.*` (snacks.nvim); telescope was removed. Git signs come from `gitsigns.nvim`, which also feeds the lualine diff component via `vim.b.gitsigns_status_dict`.
 
 #### Catppuccin Theme Cache
 
@@ -84,7 +86,7 @@ dotfiles/
 │       ├── nvim/     # Neovim configuration (Lua-based, lazy.nvim)
 │       ├── tmux/     # Tmux configuration
 │       ├── git/      # Git configuration
-│       ├── kitty/    # Kitty terminal config
+│       ├── ghostty/  # Ghostty terminal config
 │       ├── bat/      # Bat (cat alternative) config
 │       ├── ripgrep/  # Ripgrep configuration
 │       └── aerospace/ # AeroSpace window manager config
@@ -99,6 +101,8 @@ dotfiles/
 The repository uses GNU Stow to manage symlinks. Each top-level directory (except `bin/`) is a "stow package":
 - `zsh/` directory contents are symlinked directly to `$HOME`
 - `config/` directory contents are symlinked to `$HOME` with `--no-folding` to prevent directory merging
+
+**IMPORTANT**: `--no-folding` symlinks each file individually, not the directory. After adding or deleting any config file you must re-run `stow --target "$HOME" --no-folding config`, otherwise the new file is never linked and the deleted one leaves a dangling symlink.
 
 ### Neovim Plugin Architecture
 
@@ -118,13 +122,13 @@ The `.zshrc` configuration:
 - Uses fzf for fuzzy finding with fd as the default command
 - Adds `$DOTFILES/bin` to PATH for custom scripts
 - Defines `$CODE_DIR` (~/dev) for project navigation
-- Custom minimal prompt showing pwd and git branch
+- Custom minimal prompt showing pwd only (no git branch)
 
 ### Custom Utility Scripts
 
 The `bin/` directory contains various shell utilities that are added to PATH:
 - Git utilities: `git-bare-clone`, `git-clc`, `git-kill`, `git-modified`, `git-track`
-- Development helpers: `t` (task management), `tm` (tmux wrapper), `manage` (docker-compose wrapper)
+- Development helpers: `t` (targeted Jest/react-scripts test runner), `tm` (tmux session picker)
 - System utilities: `killport`, `wtfport`, `jwt` (JWT decoder), `extract` (universal archive extractor)
 
 ## Theme and Visual Consistency
@@ -132,5 +136,5 @@ The `bin/` directory contains various shell utilities that are added to PATH:
 All tools use the Catppuccin Mocha theme:
 - Neovim: `colorscheme catppuccin` in init.lua
 - Tmux: Catppuccin plugin configured in tmux.conf
-- Bat: Catppuccin themes installed during install.sh
+- Bat: Catppuccin Mocha (`--theme="Catppuccin Mocha"`; themes installed during install.sh)
 - Shell: FZF colors configured to match in .zshrc
