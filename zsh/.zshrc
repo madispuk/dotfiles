@@ -76,6 +76,14 @@ zstyle ':completion:*' group-name ''
 ########################################################
 
 source "$HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+
+# zsh-syntax-highlighting underlines existing paths (and precommands like `sudo`)
+# by default. Color them instead of underlining.
+ZSH_HIGHLIGHT_STYLES[path]='fg=cyan'
+ZSH_HIGHLIGHT_STYLES[path_prefix]='fg=cyan'
+ZSH_HIGHLIGHT_STYLES[precommand]='fg=green'
+ZSH_HIGHLIGHT_STYLES[autodirectory]='fg=green'
+ZSH_HIGHLIGHT_STYLES[suffix-alias]='fg=green'
 source "$HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
 source <(fzf --zsh)
 
