@@ -48,7 +48,8 @@ brew "lazygit" # a better git UI
 brew "tree-sitter-cli" # required by nvim-treesitter `main` branch to build parsers
 brew "yazi" # terminal file manager
 brew "ripgrep" # very fast file searcher
-brew "shellcheck" # diagnostics for shell scripts
+brew "opentofu" # provides `tofu fmt`, used by conform.nvim for terraform files
+brew "shellcheck" # diagnostics for shell scripts, used by nvim-lint
 brew "stylua" # lua formatter, used by conform.nvim
 brew "tree" # pretty-print directory contents
 brew "wdiff" # word differences in text files

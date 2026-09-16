@@ -33,7 +33,7 @@ The Neovim configuration uses lazy.nvim as the plugin manager:
 - **Plugins**: Individual plugin configurations in `config/.config/nvim/lua/plugins/`
 
 Key plugin files:
-- `plugins/lsp.lua` - LSP configuration
+- `plugins/lsp.lua` - LSP, linting (nvim-lint) and formatting (conform.nvim) plugin specs
 - `plugins/snacks.lua` - Fuzzy finder (snacks.nvim picker)
 - `plugins/completion.lua` - Auto-completion
 - `plugins/treesitter.lua` - Syntax highlighting
@@ -45,6 +45,22 @@ Key plugin files:
 The `utils.lua` module provides keymap helper functions (`nmap`, `imap`, `vmap`, `nnoremap`, `xnoremap`, `onoremap`) that are used throughout the configuration. Only those six exist - do not assume other variants are available.
 
 Pickers go through `Snacks.picker.*` (snacks.nvim); telescope was removed. Git signs come from `gitsigns.nvim`, which also feeds the lualine diff component via `vim.b.gitsigns_status_dict`.
+
+#### LSP Server Configuration
+
+**IMPORTANT**: Server definitions are NOT written by hand. `nvim-lspconfig` is installed purely for the `lsp/<name>.lua` files it ships, which Neovim 0.11+ resolves off the `runtimepath` - it provides `cmd`, `filetypes`, root detection and server-specific commands/handlers.
+
+- Per-server overrides live in `config/.config/nvim/after/lsp/<name>.lua`, which wins over the plugin's copy (`:h lsp-config-merge`). Return a table; it is deep-merged.
+- Only override what actually differs. A server needing no changes gets no file (`tailwindcss`, `html`, `jsonls` and `vimls` are all upstream defaults).
+- Do NOT use `vim.lsp.config.<name> = {...}` (table assignment) - that **replaces** the resolved chain and would discard nvim-lspconfig's definition. Use `after/lsp/` or `vim.lsp.config("<name>", {...})`.
+- Do NOT define `on_attach` in an override for a server whose upstream config has one (e.g. `basedpyright`) - functions are replaced, not merged, so its user commands would be lost.
+- Shared settings go in the `vim.lsp.config("*", ...)` call in `plugins/lsp.lua`; the server list is the single `vim.lsp.enable({...})` call.
+- Features that Neovim 0.12 requires to be enabled explicitly (inlay hints, linked editing) are turned on in the `LspAttach` handler, guarded by `client:supports_method()`. Server-side `inlayHints` settings do nothing without `vim.lsp.inlay_hint.enable()`.
+- LSP keymaps deliberately avoid `gr`: it is the prefix for Neovim's default `grn`/`gra`/`grr`/`gri`/`grt`/`grx` maps, so binding `gr` itself stalls every press for `timeoutlen` and shadows all six. Rename is `grn`, hover is `K`.
+- `blink.cmp`'s completion capabilities must be passed explicitly (blink does not register them itself); this happens once via `vim.lsp.config("*", ...)`.
+- Use `:lsp restart|enable|disable` and `:checkhealth vim.lsp` (Neovim 0.12). Note checkhealth reports "Unknown filetype" warnings for entries in nvim-lspconfig's 50-filetype tailwindcss list - that is expected noise, not a problem.
+
+Linters belong in `nvim-lint`, formatters in `conform.nvim`. Some tools exist as both (`shellcheck`, `stylelint`) - conform's `shellcheck` formatter rewrites the file via `--format=diff | patch`, which is not wanted on save.
 
 #### Catppuccin Theme Cache
 
@@ -83,6 +99,8 @@ dotfiles/
 ├── config/           # XDG-style config files (stowed to ~/.config/)
 │   └── .config/
 │       ├── nvim/     # Neovim configuration (Lua-based, lazy.nvim)
+│       │   ├── lua/plugins/  # lazy.nvim plugin specs
+│       │   └── after/lsp/    # per-server LSP overrides on top of nvim-lspconfig
 │       ├── tmux/     # Tmux configuration
 │       ├── git/      # Git configuration
 │       ├── ghostty/  # Ghostty terminal config

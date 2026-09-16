@@ -81,15 +81,29 @@ vim.opt.fcs = "eob: ,diff: " -- hide ~ on empty lines, hide dashes in diff fille
 -- ============================================================================
 -- Diagnostics
 -- ============================================================================
+-- Diagnostics render as end-of-line virtual text on the cursor's line only.
+-- virtual_lines (the stacked-under-the-line view) inserts real virtual lines, so
+-- every cursor move between a clean line and a diagnostic line re-flows the whole
+-- buffer below it - the jumping is inherent to that handler, there is no way to
+-- reserve the space. Virtual text overlays instead: it only ever grows to the
+-- right, never pushes anything down. Restricting it to the cursor line keeps the
+-- old problem away too (all-lines virtual text concatenated every diagnostic on a
+-- line into the right margin); with severity_sort the most severe message is the
+-- one shown first, and `<leader>e` opens the float with all of them in full.
+-- Underline plus the sign column stay as the at-a-glance marker off the cursor
+-- line, and `gK` toggles the full virtual_lines view on demand.
+local virtual_text = {
+  current_line = true,
+  prefix = "",
+  format = function(diagnostic)
+    local msg = diagnostic.message:gsub("%s+", " ")
+    return #msg > 100 and msg:sub(1, 99) .. "…" or msg
+  end,
+}
+
 vim.diagnostic.config({
-  -- Diagnostics render as virtual lines under the cursor's line only. End-of-line
-  -- virtual text concatenated every diagnostic on a line into the right margin
-  -- (four diagnostics meant four bullets, messages truncated); virtual lines show
-  -- all of them stacked and in full, and only where the cursor is. `gK` toggles
-  -- always-on. Underline is back on: with virtual text gone it is the only
-  -- at-a-glance marker on lines the cursor is not on, alongside the sign column.
-  virtual_text = false,
-  virtual_lines = { current_line = true },
+  virtual_text = virtual_text,
+  virtual_lines = false,
   -- Define diagnostic signs (modern way, not deprecated)
   signs = {
     text = {
@@ -108,14 +122,32 @@ vim.diagnostic.config({
     header = "",
     prefix = "",
   },
+  -- Jumping to a diagnostic (]d / [d) is the one moment the layout shift is worth
+  -- it: show that one diagnostic as virtual lines, in full (:h diagnostic-on-jump-example)
+  jump = {
+    on_jump = function(diagnostic, bufnr)
+      if not diagnostic then
+        return
+      end
+      vim.diagnostic.show(
+        diagnostic.namespace,
+        bufnr,
+        { diagnostic },
+        { virtual_lines = { current_line = true }, virtual_text = false }
+      )
+    end,
+  },
 })
 
--- Toggle always-on virtual lines (:h diagnostic-toggle-virtual-lines-example)
+-- Toggle the stacked virtual_lines view (:h diagnostic-toggle-virtual-lines-example)
 vim.keymap.set("n", "gK", function()
-  local showing_all = vim.diagnostic.config().virtual_lines == true
-  vim.diagnostic.config({ virtual_lines = showing_all and { current_line = true } or true })
-  vim.notify("diagnostics: " .. (showing_all and "current line" or "all lines"))
-end, { desc = "Toggle diagnostic virtual_lines (current line / all)" })
+  local showing_lines = vim.diagnostic.config().virtual_lines ~= false
+  vim.diagnostic.config({
+    virtual_lines = not showing_lines,
+    virtual_text = showing_lines and virtual_text or false,
+  })
+  vim.notify("diagnostics: " .. (showing_lines and "inline (current line)" or "virtual lines (all)"))
+end, { desc = "Toggle diagnostic virtual_lines (inline / all lines)" })
 
 -- ============================================================================
 -- Indentation
