@@ -80,7 +80,6 @@ Notable git aliases include:
 
 ```
 dotfiles/
-├── bin/              # Custom utility scripts added to PATH
 ├── config/           # XDG-style config files (stowed to ~/.config/)
 │   └── .config/
 │       ├── nvim/     # Neovim configuration (Lua-based, lazy.nvim)
@@ -98,7 +97,7 @@ dotfiles/
 
 ### Stow-based Architecture
 
-The repository uses GNU Stow to manage symlinks. Each top-level directory (except `bin/`) is a "stow package":
+The repository uses GNU Stow to manage symlinks. Each top-level directory is a "stow package":
 - `zsh/` directory contents are symlinked directly to `$HOME`
 - `config/` directory contents are symlinked to `$HOME` with `--no-folding` to prevent directory merging
 
@@ -120,16 +119,8 @@ The `.zshrc` configuration:
 - Sources Homebrew-installed zsh plugins (syntax-highlighting, autosuggestions)
 - Integrates zoxide for smart directory jumping (aliased to `cd`)
 - Uses fzf for fuzzy finding with fd as the default command
-- Adds `$DOTFILES/bin` to PATH for custom scripts
 - Defines `$CODE_DIR` (~/dev) for project navigation
 - Custom minimal prompt showing pwd only (no git branch)
-
-### Custom Utility Scripts
-
-The `bin/` directory contains various shell utilities that are added to PATH:
-- Git utilities: `git-bare-clone`, `git-clc`, `git-kill`, `git-modified`, `git-track`
-- Development helpers: `t` (targeted Jest/react-scripts test runner), `tm` (tmux session picker)
-- System utilities: `killport`, `wtfport`, `jwt` (JWT decoder), `extract` (universal archive extractor)
 
 ## Theme and Visual Consistency
 

@@ -41,6 +41,7 @@ brew "gnupg" # GPG
 brew "grep" # grep (latest)
 brew "highlight" # code syntax highlighting
 brew "jq" # work with JSON files in shell scripts
+brew "jwt-cli" # decode/verify JWTs
 brew "k9s" # kubernetes TUI (aliased in .zshrc)
 brew "lazygit" # a better git UI
 # neovim is managed by mise (pinned to 0.12 in ~/.config/mise/config.toml).

@@ -8,11 +8,6 @@ export ZSH=$DOTFILES/zsh
 autoload -U compinit add-zsh-hook
 compinit
 
-## Add $DOTFILES/bin to PATH if it's not already included
-if [[ ":$PATH:" != *":$HOME/$DOTFILES/bin:"* ]]; then
-    export PATH="$HOME/$DOTFILES/bin:$PATH"
-fi
-
 # define the code directory
 # This is where my code exists and where I want the `c` autocomplete to work from exclusively
 if [[ -d ~/dev ]]; then
